@@ -6,9 +6,11 @@
 	<script src="app.js"></script>
 </head>
 <body ng-app='app'>
-<h1>Trendwave Top Results</h1>
-<div ng-controller='appController'>
-	<div ng-repeat='trend in trends'><button ng-click="twitterGrab(trend)">{{trend}}</button></div>
-</div>
+
+	<h1>Trendwave Top Results</h1>
+	<div ng-controller='appController'>
+		<div ng-repeat='trend in trends'><button ng-click="twitterGrab(trend)">{{ trend }}</button></div>
+	</div>
+
 </body>
 </html>

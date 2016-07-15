@@ -5,7 +5,7 @@ var app = angular.module('app', []);
 app.controller('appController', function($scope, $http) {
 	$scope.display = 'testing';
 	$scope.trends = [];
-	$scope.trendsGrab = 
+	$scope.trendsGrab =
 		$http({
 			method: 'GET',
 			url: '/trends'
@@ -14,6 +14,7 @@ app.controller('appController', function($scope, $http) {
 		}, function error(response) {
 			console.log(response)
 		});
+
 	$scope.twitterGrab = function (q) {
 		// q = q.replace(/\s/g, '');
 		$http({
