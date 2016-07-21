@@ -3,7 +3,7 @@ var googleTrends = require('google-trends-api');
 var Twitter = require('twitter');
 var fs = require('fs');
 var api_key = require('../../api_keys.js')
-
+var db = require('../database');
 
 // Watson functions below
 
@@ -14,53 +14,24 @@ var alchemy_language = watson.alchemy_language({
   api_key: api_key.watson_api_key
 });
 
-var getSentiment = function(item) {
+var getSentiment = function(params) {
 	return new Promise(function(resolve, reject) {
-		alchemy_language.sentiment(item, function (err, response) {
+		alchemy_language.sentiment(params, function (err, response) {
 		  if (err) {
 		    reject(err);
 		  } else {
-		  	resolve(response.docSentiment.type);
+		  	resolve(response.docSentiment);
 		  }
 		});
 	})
 };
 
-var countSentiment = function(sentimentType) {
-	if (sentimentType === 'neutral') {
-	  neutralCount++;
-	} else if (sentimentType === 'positive') {
-		positiveCount++
-	} else if (sentimentType === 'negative') {
-		negativecount++
-	}
-}
+var tweetText = ''
 
-var positiveCount = 0;
-var negativecount = 0;
-var neutralCount = 0;
-
-var getAggregateSentiment = function(tweets) {
-	tweets.forEach(function(tweet) {
-		getSentiment(tweet).then(function(item) {
-			countSentiment(item);
-		}).then(function() {
-			if (tweets.length === positiveCount + negativecount + neutralCount) {
-				var total = positiveCount + negativecount + neutralCount;
-				console.log('positive: ', positiveCount / total, ' negative: ', negativecount / total, ' neutral: ', neutralCount / total);
-				positiveCount = 0;
-				negativecount = 0;
-				neutralCount = 0;
-			}
-		})
-	})
-}
-
+// Twitter functions below
 
 module.exports = {
-
-	// Twitter functions below
-
+	
 	grabTweets: function(req, res) {
 		var query = req.body.q;
 		var grabTweets = new Twitter({
@@ -72,19 +43,83 @@ module.exports = {
 
 		});
 
-		grabTweets.get('search/tweets', {q: query, count: 50, result_type: 'recent', lang: 'en'}, function(error, tweets, response) {
-		 if (!error) {
-		   var tweetText = tweets.statuses.map(function(tweetObj) {
-		      return {text: tweetObj.text
-		      .replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')
-		      .replace(/[`~@#$%^&*()_|☆+\-=;:<>\{\}\[\]\\\/]/gi, ' ')
-		    	}
-		   })
-		   console.log(tweetText)
-		   getAggregateSentiment(tweetText);
+		var max_id = 100000000000000000000000000000000000000;
+		var tweetString = '';
+		var counter = 0;
 
-		 }
-		})
+		var callTwitter = function() {
+			return new Promise(function(resolve, reject) {	
+				grabTweets.get('search/tweets', {q: query, count: 100, result_type: 'recent', lang: 'en', result_type: 'recent', max_id: max_id}, function(error, tweets) {
+				  if (error) {
+				 		reject(err) 
+				  } else {
+
+				  	var newMaxId = [];
+
+				  	// find the new max_id
+				  	for (var i = 0; i < tweets.statuses.length; i++) {
+				  		newMaxId.push(tweets.statuses[i].id)
+				  	}
+
+				  	// overwrite the max_id with the new number
+				  	newMaxId.sort()
+				  	max_id = newMaxId[0] - 10;
+
+				  	// build up the tweetString variable 
+				  	resolve(
+					   	tweets.statuses.forEach(function(tweetObj, index) {
+					   		counter++
+					      tweetString += tweetObj.text
+					      .replace(/(?:https?|ftp):\/\/[\n\S]+/g, '')
+					      .replace(/[`❤️~@#$%^&*()_|☆+\-=;:<>\{\}\[\]\\\/]/gi, ' ')
+					      
+					    })
+				    )
+				  }
+				})
+			})		
+		}
+
+
+		callTwitter().then(function() {
+			callTwitter().then(function() {
+				callTwitter().then(function() {
+					callTwitter().then(function() {
+						callTwitter().then(function() {
+
+							getSentiment({text: tweetString}).then(function(data) {
+								console.log(data)
+								res.send(data);
+							});
+							
+						});
+					});
+				});
+			});
+		});
+
+	},
+
+	grabSentiment: function(req, res) {
+
+		var query = req.body.q;
+		var grabTweets = new Twitter({
+
+		 consumer_key: api_key.consumer_key,
+		 consumer_secret: api_key.consumer_secret,
+		 access_token_key: api_key.access_token_key,
+		 access_token_secret: api_key.access_token_secret
+
+		});
+
+		grabTweets.get('search/tweets', {q: query, count: 2, result_type: 'popular', lang: 'en', result_type: 'recent'}, function(error, tweets) {
+			if (error) {
+				throw error
+			} else {
+				console.log(tweets.statuses[0].text)
+			}
+		});		
 	}
+
 }
 

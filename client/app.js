@@ -22,7 +22,7 @@ app.controller('appController', function($scope, $http) {
 			url: '/grabTweets',
 			data: {q: q}
 		}).then(function success(response) {
-				console.log('success ' + q);
+				console.log('success ' + response);
 			}, function error(response) {
 				console.log('failure ' + q);
 			});
