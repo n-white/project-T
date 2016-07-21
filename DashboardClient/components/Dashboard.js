@@ -4,7 +4,7 @@ import Tab from './Tab';
 import Navigation from './Navigation';
 import {Grid, Row, Col, Clearfix, Panel, Well, Button} from 'react-bootstrap';
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Image, Jumbotron} from 'react-bootstrap';
-import {Router, Route, Link, hashHistory, IndexRoute} from 'react-router';
+// import {Router, Route, Link, hashHistory, IndexRoute} from 'react-router';
 
 
 
