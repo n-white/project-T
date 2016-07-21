@@ -47,7 +47,8 @@ module.exports = {
 			num_angrys = num_angrys / totalReactions;
 
 			var summary = {likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
-			console.log(summary);
+			
+			res.send(summary)
 
 		})
 	}	
