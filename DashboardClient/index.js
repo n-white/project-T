@@ -21141,7 +21141,7 @@
 	    _this.state = {
 	      trends: [],
 	      currentTrend: '',
-	      data: [{ age: '5', population: 2704659 }, { age: '5-13', population: 4499890 }, { age: '14-17', population: 2159981 }, { age: '18-24', population: 3853788 }, { age: '25-44', population: 8106543 }],
+	      data: [{ age: 'positive', population: 40 }, { age: 'negative', population: 60 }],
 	      publicSentiment: '',
 	      emotionalFeedback: '',
 	      trendHistory: '',
@@ -21172,7 +21172,12 @@
 	  }, {
 	    key: 'twitterGrab',
 	    value: function twitterGrab(q) {
-	      console.log(q);
+
+	      this.setState({
+	        currentTrend: q
+	      });
+
+	      console.log(q, this);
 	      $.ajax({
 	        method: "POST",
 	        url: 'http://localhost:3000/grabTweets',
@@ -21315,10 +21320,15 @@
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
 	              { md: 6, mdPull: 6 },
+	              _react2.default.createElement(
+	                'h2',
+	                null,
+	                'Twitter Sentiment'
+	              ),
 	              _react2.default.createElement(_Pie2.default, { data: this.state.data }),
 	              _react2.default.createElement(
 	                _reactBootstrap.Button,
-	                { bsStyle: 'primary', bsSize: 'large', onClick: this.fetchData.bind(this), block: true },
+	                { bsStyle: 'primary', bsSize: 'large', onClick: this.twitterGrab.bind(this, 'Kabali'), block: true },
 	                'Update Chart  '
 	              )
 	            )
@@ -31482,7 +31492,7 @@
 	      radius = Math.min(width, height) / 2;
 
 	      //Ordinal scale w/ default domain and colors for range
-	      var color = d3.scaleOrdinal().range(["#C74029", "#FAE8CD", "#128085", "#385052", "#F0AD44"]);
+	      var color = d3.scaleOrdinal().range(["#128085", "#C74029", "#FAE8CD", "#385052", "#F0AD44"]);
 
 	      //create arc data (to define path svg)
 	      var arc = d3.arc().outerRadius(radius - 10).innerRadius(0);

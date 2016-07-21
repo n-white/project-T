@@ -15,11 +15,8 @@ class Dashboard extends React.Component {
       trends: [],
       currentTrend: '',
       data:[
-        {age: '5', population: 2704659},
-        {age: '5-13', population: 4499890},
-        {age: '14-17', population: 2159981},
-        {age: '18-24', population: 3853788},
-        {age: '25-44', population: 8106543}
+        {age: 'positive', population: 40},
+        {age: 'negative', population: 60},
       ],
       publicSentiment: '',
       emotionalFeedback: '',
@@ -46,7 +43,12 @@ class Dashboard extends React.Component {
   }
 
   twitterGrab (q) {
-    console.log(q);
+
+    this.setState({
+      currentTrend: q
+    })
+
+    console.log(q, this);
     $.ajax({
       method: "POST",
       url: 'http://localhost:3000/grabTweets',
@@ -140,8 +142,9 @@ class Dashboard extends React.Component {
             </Row>
           </Col>
           <Col md={6} mdPull={6}>
+            <h2>Twitter Sentiment</h2>
             <Pie data={this.state.data}/>
-            <Button bsStyle="primary" bsSize="large" onClick={this.fetchData.bind(this)} block>Update Chart  </Button>
+            <Button bsStyle="primary" bsSize="large" onClick={this.twitterGrab.bind(this, 'Kabali')} block>Update Chart  </Button>
           </Col>
         </Row>
         <Row>

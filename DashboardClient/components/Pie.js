@@ -24,7 +24,7 @@ class Pie extends React.Component {
 
     //Ordinal scale w/ default domain and colors for range
     var color = d3.scaleOrdinal()
-        .range(["#C74029","#FAE8CD","#128085","#385052","#F0AD44"]);
+        .range(["#128085","#C74029","#FAE8CD","#385052","#F0AD44"]);
 
 
 
