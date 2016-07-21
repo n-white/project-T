@@ -1,5 +1,3 @@
-from flask import Flask
-app = Flask(__name__)
 import urllib2
 import json
 import datetime
