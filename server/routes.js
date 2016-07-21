@@ -9,6 +9,9 @@ router.route('/trends')
 router.route('/grabTweets')
 	.post(twitterController.grabTweets)
 
+router.route('/grabTopTweet')
+	.post(twitterController.grabTopTweet)
+
 router.route('/grabFbook')
 	.post(facebookController.grabFbook)
 

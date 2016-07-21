@@ -34,7 +34,6 @@ module.exports = {
 	
 	grabTweets: function(req, res) {
 		var query = req.body.q;
-		console.log('!@#$!@##@!$',req.body);
 		var grabTweets = new Twitter({
 
 		 consumer_key: api_key.consumer_key,
@@ -99,7 +98,6 @@ module.exports = {
 									negative = Math.abs((Number(data.score) - 1) / 2);
 									positive = 1 - negative;
 								}
-								console.log({positive: positive, negative: negative})
 								res.send({positive: positive, negative: negative});
 							});
 							
@@ -111,7 +109,7 @@ module.exports = {
 
 	},
 
-	grabSentiment: function(req, res) {
+	grabTopTweet: function(req, res) {
 
 		var query = req.body.q;
 		var grabTweets = new Twitter({
@@ -127,7 +125,7 @@ module.exports = {
 			if (error) {
 				throw error
 			} else {
-				console.log(tweets.statuses[0].text)
+				res.json(tweets.statuses[0].text);
 			}
 		});		
 	}
