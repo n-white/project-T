@@ -88,8 +88,18 @@ module.exports = {
 						callTwitter().then(function() {
 
 							getSentiment({text: tweetString}).then(function(data) {
-								console.log(data)
-								res.send(data);
+								
+								var positive = 0;
+								var negative = 0;
+								if (data.type === 'positive') {
+									positive = (1 + Number(data.score)) / 2;
+									negative = 1 - positive;
+								} else {
+									negative = Math.abs((Number(data.score) - 1) / 2);
+									positive = 1 - negative;
+								}
+								console.log({positive: positive, negative: negative})
+								res.send({positive: positive, negative: negative});
 							});
 							
 						});
