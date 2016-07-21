@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/', routes);
 
-app.use(express.static('client'));
+app.use(express.static('DashboardClient'));
 
 app.listen(3000, function (req, res) {
 	console.log('server is listening on 3000');

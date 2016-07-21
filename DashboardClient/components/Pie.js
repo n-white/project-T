@@ -9,7 +9,7 @@ class Pie extends React.Component {
     
   }
   componentDidMount () {
-    console.log(this.props.data);
+    // console.log(this.props.data);
     this.updateChart(this.props.data);
   }
 

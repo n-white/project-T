@@ -34,6 +34,7 @@ module.exports = {
 	
 	grabTweets: function(req, res) {
 		var query = req.body.q;
+		console.log('!@#$!@##@!$',req.body);
 		var grabTweets = new Twitter({
 
 		 consumer_key: api_key.consumer_key,
