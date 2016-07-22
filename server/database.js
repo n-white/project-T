@@ -1,6 +1,6 @@
 var Sequelize = require('Sequelize');
-var sequelize = new Sequelize('trendWaveDB', 'root', 'cake');
-// var mysql = require('mysql');
+var sequelize = new Sequelize('trendwave', 'root', 'cake');
+var mysql = require('mysql');
 
 var Trends = sequelize.define('Trends', {
  name: Sequelize.STRING
@@ -32,6 +32,8 @@ var FB_Sentiments = sequelize.define('FB_Sentiments', {
    timestamps: false
 });
 
+FB_Sentiments.removeAttribute('id');
+
 // var Trend_Popularity = sequelize.define('Trend_Popularity', {
 //   popularity: Sequelize.INTEGER,
 //   time: Sequelize.DATE
@@ -43,9 +45,10 @@ var FB_Sentiments = sequelize.define('FB_Sentiments', {
 // Trend_Popularity.hasMany(Trends);
 
 // Twitter_Sentiments.sync().then(Trends.sync().then(FB_Sentiments.sync().then(function() {
-//    mysql.query('alter table FB_Sentiments drop column updatedAt;');
-//    mysql.query('alter table FB_Sentiments drop column createdAt;')
+// "LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/csv/nytimes_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
 // })));
+
+// var myquery = JSON.stringify(LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/csv/nytimes_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;);
 
 Trends.sync().then(Twitter_Sentiments.sync().then(FB_Sentiments.sync()));
 

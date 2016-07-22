@@ -14,6 +14,18 @@ class Pie extends React.Component {
   }
 
   componentWillUpdate () {
+    console.log('updating!');
+    // var data = this.props.twitterData;
+    // var pie = d3.pie()
+    //     .sort(null)
+    //     .value(function(d){
+    //       return d.score;
+    //     });
+
+    // d3.select('svg').selectAll('.arc')
+    //   .data(pie(data));
+    console.log(this.props.data);
+    // this.updateChart(this.props.data);
 
   }
 
@@ -41,7 +53,7 @@ class Pie extends React.Component {
     var pie = d3.pie()
         .sort(null)
         .value(function(d){
-          return d.population;
+          return d.score;
         });
     //append both and svg and a g (group) element to the page. Move it over to the middle
     var svg = d3.select('#chart').append('svg')
@@ -60,7 +72,7 @@ class Pie extends React.Component {
     //put a path element in the g, give it a d attribute of the previously defined arc path. Grab its color from the scale range
     g.append('path')
     .attr('d', arc)
-    .style('fill', function(d) {return color(d.data.age);});
+    .style('fill', function(d) {return color(d.data.label);});
 
     //put svg text elements on each g. Use the cenrtroid method to position center of the slice. Shift the dy positioning. Pull text from data
     g.append('text')
@@ -68,7 +80,7 @@ class Pie extends React.Component {
     .attr('dy', '.35em')
     .attr('dx', '-.8em')
     .attr('font-size', '15px')
-    .text(function(d) {return d.data.age;});
+    .text(function(d) {return d.data.label;});
   }
   render () {
     return (
