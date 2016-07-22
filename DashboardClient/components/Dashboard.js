@@ -36,8 +36,8 @@ class Dashboard extends React.Component {
     //start everything
     this.getTrends();
     this.updateChart(this.state.twitterData, '#twitterChart');
-    this.updateChart(this.state.twitterData, '#facebookChart');
-
+    // this.updateChart(this.state.twitterData, '#facebookChart');
+    this.updateDonutChart(this.state.facebookData);
     // setInterval(this.getTrends.bind(this), 3000);
   }
 
@@ -101,7 +101,7 @@ class Dashboard extends React.Component {
         var fbdata = map(d, function(value, prop){
           return { 
             label: prop,
-            score: value === null ? 1 : value
+            score: value
           };
         })
         context.setState({
@@ -109,7 +109,9 @@ class Dashboard extends React.Component {
         });
         console.log('response fb mapped: ', fbdata);
         d3.select('#facebookChart').selectAll('svg').remove();
-        context.updateChart(context.state.facebookData, '#facebookChart');
+        // context.updateChart(context.state.facebookData, '#facebookChart');
+        context.updateDonutChart(context.state.facebookData);
+
       },
       dataType: 'json'
     });
@@ -154,22 +156,22 @@ class Dashboard extends React.Component {
         radius = Math.min(width, height) / 2;
 
     //Ordinal scale w/ default domain and colors for range
-    var color = d3.scaleOrdinal()
+    var color = d3.scale.ordinal()
         .range(["#F0AD44","#128085","#FAE8CD","#385052","#C74029"]);
 
 
 
     //create arc data (to define path svg)
-    var arc = d3.arc()
+    var arc = d3.svg.arc()
         .outerRadius(radius - 10)
         .innerRadius(0);
 
-    var labelArc = d3.arc()
+    var labelArc = d3.svg.arc()
         .outerRadius(radius - 10)
         .innerRadius(0);
 
     //create pie layout order data
-    var pie = d3.pie()
+    var pie = d3.layout.pie()
         .sort(null)
         .value(function(d){
           return d.score;
@@ -201,7 +203,118 @@ class Dashboard extends React.Component {
     .attr('font-size', '15px')
     .text(function(d) {return d.data.label;});
   }
+  updateDonutChart (dataset){
+    var width = 450,
+        height = 450,
+        outerRadius = Math.min(width, height) * .5 - 10,
+        innerRadius = outerRadius * .6;
 
+    // emoDataset 
+
+    var dataFromServer = map(dataset, function(item){
+      return item.score;
+    });
+    var emoDataset = [null].concat(dataFromServer);
+    console.log('emoDataset', emoDataset);  
+
+    var fTest = function () {
+      emoDataset.splice(0, 1);
+      return emoDataset[0]; 
+    }
+
+    var n = 5,
+        data0 = d3.range(n).map(Math.random),
+        data1 = d3.range(n).map(fTest),
+        data;
+
+    var color = d3.scale.category20();
+
+    var arc = d3.svg.arc();
+
+    var pie = d3.layout.pie()
+        .sort(null);
+
+    var svg = d3.select("#facebookChart").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.selectAll(".arc")
+        .data(arcs(data0, data1))
+      .enter().append("g")
+        .attr("class", "arc")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+      .append("path")
+        .attr("fill", function(d, i) { return color(i); })
+        .attr("d", arc);
+
+    transition(1);
+
+    // copied code //
+
+    function arcs(data0, data1) {
+      var arcs0 = pie(data0),
+          arcs1 = pie(data1),
+          i = -1,
+          arc;
+      while (++i < n) {
+        arc = arcs0[i];
+        arc.innerRadius = innerRadius;
+        arc.outerRadius = outerRadius;
+        arc.next = arcs1[i];
+      }
+      return arcs0;
+    }
+
+    // end copied code //
+
+    // function transition(state) {
+    //   var path = d3.select('#facebookChart').selectAll(".arc > path")
+    //       .data(state ? arcs(data0, data1) : arcs(data1, data0));
+
+    //   var t0 = path.transition()
+    //       .duration(500)
+    //       .attrTween("d", tweenArc(function(d, i) {
+    //         return {
+    //           innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+    //           outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+    //         };
+    //       }));
+
+    //   var t1 = t0.transition()
+    //       .attrTween("d", tweenArc(function(d, i) {
+    //         var a0 = d.next.startAngle + d.next.endAngle,
+    //             a1 = d.startAngle - d.endAngle;
+    //         return {
+    //           startAngle: (a0 + a1) / 2,
+    //           endAngle: (a0 - a1) / 2
+    //         };
+    //       }));
+
+    //   var t2 = t1.transition()
+    //         .attrTween("d", tweenArc(function(d, i) {
+    //           return {
+    //             startAngle: d.next.startAngle,
+    //             endAngle: d.next.endAngle
+    //           };
+    //         }));
+
+    //   var t3 = t2.transition()
+    //       .attrTween("d", tweenArc(function(d, i) {
+    //         return {
+    //           innerRadius: innerRadius,
+    //           outerRadius: outerRadius
+    //         };
+    //       }));
+    // }
+
+    // function tweenArc(b) {
+    //   return function(a, i) {
+    //     var d = b.call(this, a, i), i = d3.interpolate(a, d);
+    //     for (var k in d) a[k] = d[k]; // update data
+    //     return function(t) { return arc(i(t)); };
+    //   };
+    // }
+  }
 
   render () {
     return (
