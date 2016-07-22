@@ -30,27 +30,27 @@ var task = cron.schedule('* * * * *', function() {
 }, false);
 
 
-var csvScheduler = cron.schedule('* * * * *', function() {
-  console.log('Update CSV running');
-  exec(__dirname + '/updateCSV.sh', function(error, stdout, stderr) {
-      console.log('stdout: ', stdout);
-      console.log('stderr: ', stderr);
-      if (error !== null) {
-          console.log('exec error: ', error);
-      }
-  });
-}, false);
+// var csvScheduler = cron.schedule('* * * * *', function() {
+//   console.log('Update CSV running');
+//   exec(__dirname + '/updateCSV.sh', function(error, stdout, stderr) {
+//       console.log('stdout: ', stdout);
+//       console.log('stderr: ', stderr);
+//       if (error !== null) {
+//           console.log('exec error: ', error);
+//       }
+//   });
+// }, false);
 
 
-var facebookScrapeScheduler = cron.schedule('* /5 * * * *', function() {
-  console.log('Facebook Scraper running');
-    var process = spawn('python',['/facebookScraper/fbScrape.py']);
-}, false);
+// var facebookScrapeScheduler = cron.schedule('* * * * *', function() {
+//   console.log('Facebook Scraper running');
+//     var process = spawn('python',['/facebookScraper/fbScrape.py']);
+// }, false);
 
 
 
 
 task.start();
-csvScheduler.start();
-facebookScrapeScheduler.start();
+// csvScheduler.start();
+// facebookScrapeScheduler.start();
 
