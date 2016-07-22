@@ -8,8 +8,22 @@ module.exports = {
 	
 	grabFbook: function(req, res) {
 
+		// Search through the article archive using the largest keyword in the trend
+		var largestKeyword = '';
+		var temp = req.body.q.split(' ');
+
+		temp.forEach(function(item, index) {
+			if (index === 0) {
+				largestKeyword += item
+			} else if (index === 1) {
+				largestKeyword += ' ' + item
+			}
+		})
+
+		console.log('098172349012387490182734', largestKeyword);
+
 		// Search the database for articles that contain the selected trend
-		db.FB_Sentiments.findAll({where: {status_message: {like: '%' + req.body.q + '%'}}}).then(function(data) {
+		db.FB_Sentiments.findAll({where: {status_message: {like: '%' + largestKeyword + '%'}}}).then(function(data) {
 			
 			// Declare all the variables we will want to send back to the client side
 			var num_likes = 0;
@@ -46,10 +60,27 @@ module.exports = {
 			num_sads = num_sads / totalReactions;
 			num_angrys = num_angrys / totalReactions;
 
-			var summary = {likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
+			// Temp Obj is being used to log the retrieved article names to the console (for testing purposes)
+			var tempObj = {};
 
-			console.log('!!!!!!!!!!', data.length);
-			
+			// Declare a Top Article which we'll pass to the front end
+			var topArticle = {title: 'No relevant news articles found', likes: 0}
+
+			// Update the tempObj with all of the headlines found
+			// Update the topArticle with the headline that has the most number of likes
+			data.forEach(function(item, index) {
+				tempObj[index] = 'likes: ' + item.dataValues.num_likes + ': ' + item.dataValues.status_message;
+				if (item.dataValues.num_likes > topArticle.likes) {
+					topArticle.title = item.dataValues.status_message;
+					topArticle.likes = item.dataValues.num_likes;
+				}
+			})
+
+			// Log the headlines to the console (for backend testing purposes)
+			console.log('!!!!!!!!!!', tempObj, '???????????', topArticle);
+
+			var summary = {topHeadline: topArticle.title, likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
+
 			res.send(summary)
 
 		})
