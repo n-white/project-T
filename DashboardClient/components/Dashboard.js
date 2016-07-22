@@ -26,19 +26,23 @@ class Dashboard extends React.Component {
       emotionalFeedback: '',
       trendHistory: '',
       representativeTweet: '',
-      representativeNewsSource: ''
+      representativeNewsSource: '',
+      twitterSpinner: false,
+      facebookSpinner: false //not likely to be needed
     }
   }
 
   componentDidMount () {
+    //start everything
     this.getTrends();
     this.updateChart(this.state.twitterData, '#twitterChart');
-    this.updateChart(this.state.twitterData, '#facebookChart');
-
+    // this.updateChart(this.state.twitterData, '#facebookChart');
+    this.updateDonutChart(this.state.facebookData);
     // setInterval(this.getTrends.bind(this), 3000);
   }
 
   getTrends () {
+    //pull in data from google trends to populate dropdown menu
     var context = this;
     $.get('http://localhost:3000/trends', function(data){
       // console.log('!@#$!@#!@#',context);
@@ -50,11 +54,12 @@ class Dashboard extends React.Component {
   }
 
   twitterGrab (q) {
+    //pull in twitter data from watson to populate twitter chart
     var context = this;
     this.setState({
-      currentTrend: q
+      currentTrend: q,
+      twitterSpinner: true
     })
-
     // console.log(q, this);
     $.ajax({
       method: "POST",
@@ -69,7 +74,8 @@ class Dashboard extends React.Component {
               label: prop,
               score: value
             };
-          })
+          }),
+          twitterSpinner: false
         });
         console.log('New state is: ',context.state.twitterData);
         d3.select('#twitterChart').selectAll('svg').remove();
@@ -80,11 +86,11 @@ class Dashboard extends React.Component {
   }
 
   facebookGrab (q) {
-
+    //grab facebook data for fb chart
     this.setState({
       currentTrend: q
     })
-
+    var context = this;
     // console.log(q, this);
     $.ajax({
       method: "POST",
@@ -92,13 +98,27 @@ class Dashboard extends React.Component {
       data: JSON.stringify({q: q}),
       contentType: "application/json",
       success: function(d){
-        console.log('response fb: ', d);
+        var fbdata = map(d, function(value, prop){
+          return { 
+            label: prop,
+            score: value
+          };
+        })
+        context.setState({
+          facebookData: fbdata
+        });
+        console.log('response fb mapped: ', fbdata);
+        d3.select('#facebookChart').selectAll('svg').remove();
+        // context.updateChart(context.state.facebookData, '#facebookChart');
+        context.updateDonutChart(context.state.facebookData);
+
       },
       dataType: 'json'
     });
   }
 
   topTweetGrab (q) {
+    //grab top tweet data to populate representative tweet panel
     var context = this;
     this.setState({
       currentTrend: q
@@ -121,6 +141,7 @@ class Dashboard extends React.Component {
   }
 
   allDataGrab (q) {
+    //update everything (when new trend is selected)
     this.setState({
       currentTrend: q
     })
@@ -129,48 +150,28 @@ class Dashboard extends React.Component {
     this.twitterGrab(q);
   }
 
-  fetchData () {
-    var context = this;
-    $.ajax({
-      method:'GET',
-      url:'http://localhost:3000/trends',
-      contentType: "application/json",
-    })
-    .done(function(data){
-      context.setState({
-        data: data.data,
-        publicSentiment: data.publicSentiment,
-        emotionalFeedback: '',
-        trendHistory: '',
-        representativeTweet: '',
-        representativeNewsSource: ''
-      })
-      console.log('!!',this.state);
-    });
-  }
-
   updateChart (data, id) {
     var width = 450, //960
         height = 450, //500
         radius = Math.min(width, height) / 2;
 
     //Ordinal scale w/ default domain and colors for range
-    var color = d3.scaleOrdinal()
-        .range(["#128085","#C74029","#FAE8CD","#385052","#F0AD44"]);
+    var color = d3.scale.ordinal()
+        .range(["#F0AD44","#128085","#FAE8CD","#385052","#C74029"]);
 
 
 
     //create arc data (to define path svg)
-    var arc = d3.arc()
+    var arc = d3.svg.arc()
         .outerRadius(radius - 10)
         .innerRadius(0);
 
-    var labelArc = d3.arc()
+    var labelArc = d3.svg.arc()
         .outerRadius(radius - 10)
         .innerRadius(0);
 
     //create pie layout order data
-    var pie = d3.pie()
+    var pie = d3.layout.pie()
         .sort(null)
         .value(function(d){
           return d.score;
@@ -202,7 +203,118 @@ class Dashboard extends React.Component {
     .attr('font-size', '15px')
     .text(function(d) {return d.data.label;});
   }
+  updateDonutChart (dataset){
+    var width = 450,
+        height = 450,
+        outerRadius = Math.min(width, height) * .5 - 10,
+        innerRadius = outerRadius * .6;
 
+    // emoDataset 
+
+    var dataFromServer = map(dataset, function(item){
+      return item.score;
+    });
+    var emoDataset = [null].concat(dataFromServer);
+    console.log('emoDataset', emoDataset);  
+
+    var fTest = function () {
+      emoDataset.splice(0, 1);
+      return emoDataset[0]; 
+    }
+
+    var n = 5,
+        data0 = d3.range(n).map(Math.random),
+        data1 = d3.range(n).map(fTest),
+        data;
+
+    var color = d3.scale.category20();
+
+    var arc = d3.svg.arc();
+
+    var pie = d3.layout.pie()
+        .sort(null);
+
+    var svg = d3.select("#facebookChart").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.selectAll(".arc")
+        .data(arcs(data0, data1))
+      .enter().append("g")
+        .attr("class", "arc")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+      .append("path")
+        .attr("fill", function(d, i) { return color(i); })
+        .attr("d", arc);
+
+    transition(1);
+
+    // copied code //
+
+    function arcs(data0, data1) {
+      var arcs0 = pie(data0),
+          arcs1 = pie(data1),
+          i = -1,
+          arc;
+      while (++i < n) {
+        arc = arcs0[i];
+        arc.innerRadius = innerRadius;
+        arc.outerRadius = outerRadius;
+        arc.next = arcs1[i];
+      }
+      return arcs0;
+    }
+
+    // end copied code //
+
+    // function transition(state) {
+    //   var path = d3.select('#facebookChart').selectAll(".arc > path")
+    //       .data(state ? arcs(data0, data1) : arcs(data1, data0));
+
+    //   var t0 = path.transition()
+    //       .duration(500)
+    //       .attrTween("d", tweenArc(function(d, i) {
+    //         return {
+    //           innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+    //           outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+    //         };
+    //       }));
+
+    //   var t1 = t0.transition()
+    //       .attrTween("d", tweenArc(function(d, i) {
+    //         var a0 = d.next.startAngle + d.next.endAngle,
+    //             a1 = d.startAngle - d.endAngle;
+    //         return {
+    //           startAngle: (a0 + a1) / 2,
+    //           endAngle: (a0 - a1) / 2
+    //         };
+    //       }));
+
+    //   var t2 = t1.transition()
+    //         .attrTween("d", tweenArc(function(d, i) {
+    //           return {
+    //             startAngle: d.next.startAngle,
+    //             endAngle: d.next.endAngle
+    //           };
+    //         }));
+
+    //   var t3 = t2.transition()
+    //       .attrTween("d", tweenArc(function(d, i) {
+    //         return {
+    //           innerRadius: innerRadius,
+    //           outerRadius: outerRadius
+    //         };
+    //       }));
+    // }
+
+    // function tweenArc(b) {
+    //   return function(a, i) {
+    //     var d = b.call(this, a, i), i = d3.interpolate(a, d);
+    //     for (var k in d) a[k] = d[k]; // update data
+    //     return function(t) { return arc(i(t)); };
+    //   };
+    // }
+  }
 
   render () {
     return (
@@ -235,9 +347,9 @@ class Dashboard extends React.Component {
           </Navbar>
         </Row>
         <Row>
+          <Col xs={6} md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="(Need to figure out this data)"/></Col>
           <Col xs={6} md={4}><Tab info={this.state.publicSentiment} header="Public Sentiment" sub="(Twitter Sentiment)"/></Col>
           <Col xs={6} md={4}><Tab info={this.state.emotionalFeedback} header="Emotional Feedback" sub="(Facebook Reactions)"/></Col>
-          <Col xsHidden md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="(Need to figure out this data)"/></Col>
         </Row>
         <Row>
           <Col md={6} mdPush={6}>
@@ -249,11 +361,11 @@ class Dashboard extends React.Component {
             </Row>
           </Col>
           <Col md={6} mdPull={6}>
-            <h2>Twitter Sentiment</h2>
-            <div id="twitterChart"></div>
+            <h2 >Twitter Sentiment</h2>
+            <div id="twitterChart" style={this.state.twitterSpinner ? {backgroundImage: 'url(styles/spiffygif_46x46.gif)', 'background-repeat':'no-repeat'} : {backgroundImage: 'none'}}></div>
             <h2>Facebook Sentiment</h2>
             <div id="facebookChart"></div>
-            <Button bsStyle="primary" bsSize="large" onClick={this.facebookGrab.bind(this, 'Kabali')} block>Update Chart  </Button>
+            <Button bsStyle="primary" bsSize="large" onClick={this.allDataGrab.bind(this, this.state.currentTrend)} block>Update Chart  </Button>
           </Col>
         </Row>
         <Row>
