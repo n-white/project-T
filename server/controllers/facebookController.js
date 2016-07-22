@@ -9,7 +9,7 @@ module.exports = {
 	grabFbook: function(req, res) {
 
 		// Search the database for articles that contain the selected trend
-		db.FB_Sentiments.findAll({where: {status_message: {like: '%' + 'Hillary Clinton' + '%'}}}).then(function(data) {
+		db.FB_Sentiments.findAll({where: {status_message: {like: '%' + req.body.q + '%'}}}).then(function(data) {
 			
 			// Declare all the variables we will want to send back to the client side
 			var num_likes = 0;
@@ -47,6 +47,8 @@ module.exports = {
 			num_angrys = num_angrys / totalReactions;
 
 			var summary = {likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
+
+			console.log('!!!!!!!!!!', data.length);
 			
 			res.send(summary)
 
