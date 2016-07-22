@@ -21098,7 +21098,7 @@
 /* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {'use strict';
+	/* WEBPACK VAR INJECTION */(function($, d3) {'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -21141,7 +21141,7 @@
 	    _this.state = {
 	      trends: [],
 	      currentTrend: '',
-	      data: [{ age: 'positive', population: 40 }, { age: 'negative', population: 60 }],
+	      twitterData: [{ label: 'positive', score: 90 }, { label: 'negative', score: 10 }],
 	      publicSentiment: '',
 	      emotionalFeedback: '',
 	      trendHistory: '',
@@ -21172,7 +21172,7 @@
 	  }, {
 	    key: 'twitterGrab',
 	    value: function twitterGrab(q) {
-
+	      var context = this;
 	      this.setState({
 	        currentTrend: q
 	      });
@@ -21185,24 +21185,20 @@
 	        contentType: "application/json",
 	        success: function success(d) {
 	          console.log('response tweet: ', d);
+	          context.setState({
+	            twitterData: map(d, function (value, prop) {
+	              return {
+	                label: prop,
+	                score: value
+	              };
+	            })
+	          });
+	          console.log('New state is: ', context.state.twitterData);
+	          d3.select('svg').remove();
+	          context.updateChart(context.state.twitterData);
 	        },
 	        dataType: 'json'
 	      });
-	      // $.post('http://localhost:3000/grabTweets', JSON.stringify({q: q}), function(data){
-	      //   console.log('post response: ', data);
-	      // }, 'json');
-	      // $.ajax({
-	      //   method: 'POST',
-	      //   route: 'http://localhost:3000/grabTweets',
-	      //   dataType: 'json',
-	      //   data: JSON.stringify({q: q}),
-	      //   success: function(data){
-	      //     console.log('Response: ', data);
-	      //   },
-	      //   error: function(){
-	      //     console.log(err);
-	      //   }
-	      // });
 	    }
 	  }, {
 	    key: 'facebookGrab',
@@ -21269,6 +21265,45 @@
 	          representativeNewsSource: ''
 	        });
 	        console.log('!!', this.state);
+	      });
+	    }
+	  }, {
+	    key: 'updateChart',
+	    value: function updateChart(data) {
+	      var width = 450,
+	          //960
+	      height = 450,
+	          //500
+	      radius = Math.min(width, height) / 2;
+
+	      //Ordinal scale w/ default domain and colors for range
+	      var color = d3.scaleOrdinal().range(["#128085", "#C74029", "#FAE8CD", "#385052", "#F0AD44"]);
+
+	      //create arc data (to define path svg)
+	      var arc = d3.arc().outerRadius(radius - 10).innerRadius(0);
+
+	      var labelArc = d3.arc().outerRadius(radius - 10).innerRadius(0);
+
+	      //create pie layout order data
+	      var pie = d3.pie().sort(null).value(function (d) {
+	        return d.score;
+	      });
+	      //append both and svg and a g (group) element to the page. Move it over to the middle
+	      var svg = d3.select('#chart').append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + "," + height / 2 + ')');
+
+	      //Apply data to pie and add g's on enter
+	      var g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
+
+	      //put a path element in the g, give it a d attribute of the previously defined arc path. Grab its color from the scale range
+	      g.append('path').attr('d', arc).style('fill', function (d) {
+	        return color(d.data.label);
+	      });
+
+	      //put svg text elements on each g. Use the cenrtroid method to position center of the slice. Shift the dy positioning. Pull text from data
+	      g.append('text').attr('transform', function (d) {
+	        return 'translate(' + labelArc.centroid(d) + ')';
+	      }).attr('dy', '.35em').attr('dx', '-.8em').attr('font-size', '15px').text(function (d) {
+	        return d.data.label;
 	      });
 	    }
 	  }, {
@@ -21372,7 +21407,7 @@
 	                null,
 	                'Twitter Sentiment'
 	              ),
-	              _react2.default.createElement(_Pie2.default, { data: this.state.data }),
+	              _react2.default.createElement(_Pie2.default, { data: this.state.twitterData }),
 	              _react2.default.createElement(
 	                _reactBootstrap.Button,
 	                { bsStyle: 'primary', bsSize: 'large', onClick: this.facebookGrab.bind(this, 'Kabali'), block: true },
@@ -21395,7 +21430,16 @@
 	}(_react2.default.Component);
 
 	exports.default = Dashboard;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(173)))
+
+
+	var map = function map(obj, cb) {
+	  var result = [];
+	  for (var i in obj) {
+	    result.push(cb(obj[i], i, obj));
+	  }
+	  return result;
+	};
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(173), __webpack_require__(175)))
 
 /***/ },
 /* 173 */
@@ -31528,7 +31572,20 @@
 	    }
 	  }, {
 	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate() {}
+	    value: function componentWillUpdate() {
+	      console.log('updating!');
+	      // var data = this.props.twitterData;
+	      // var pie = d3.pie()
+	      //     .sort(null)
+	      //     .value(function(d){
+	      //       return d.score;
+	      //     });
+
+	      // d3.select('svg').selectAll('.arc')
+	      //   .data(pie(data));
+	      console.log(this.props.data);
+	      // this.updateChart(this.props.data);
+	    }
 	  }, {
 	    key: 'updateChart',
 	    value: function updateChart(data) {
@@ -31548,7 +31605,7 @@
 
 	      //create pie layout order data
 	      var pie = d3.pie().sort(null).value(function (d) {
-	        return d.population;
+	        return d.score;
 	      });
 	      //append both and svg and a g (group) element to the page. Move it over to the middle
 	      var svg = d3.select('#chart').append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + "," + height / 2 + ')');
@@ -31558,14 +31615,14 @@
 
 	      //put a path element in the g, give it a d attribute of the previously defined arc path. Grab its color from the scale range
 	      g.append('path').attr('d', arc).style('fill', function (d) {
-	        return color(d.data.age);
+	        return color(d.data.label);
 	      });
 
 	      //put svg text elements on each g. Use the cenrtroid method to position center of the slice. Shift the dy positioning. Pull text from data
 	      g.append('text').attr('transform', function (d) {
 	        return 'translate(' + labelArc.centroid(d) + ')';
 	      }).attr('dy', '.35em').attr('dx', '-.8em').attr('font-size', '15px').text(function (d) {
-	        return d.data.age;
+	        return d.data.label;
 	      });
 	    }
 	  }, {
