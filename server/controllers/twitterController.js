@@ -121,11 +121,11 @@ module.exports = {
 
 		});
 
-		grabTweets.get('search/tweets', {q: query, count: 2, result_type: 'popular', lang: 'en', result_type: 'recent'}, function(error, tweets) {
+		grabTweets.get('search/tweets', {q: query, count: 3, result_type: 'popular', lang: 'en', result_type: 'recent'}, function(error, tweets) {
 			if (error) {
 				throw error
 			} else {
-				res.json(tweets.statuses[0].text);
+				res.json({1: tweets.statuses[0].text, 2: tweets.statuses[1].text, 3: tweets.statuses[2].text});
 			}
 		});		
 	}
