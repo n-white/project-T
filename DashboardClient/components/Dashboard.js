@@ -15,8 +15,12 @@ class Dashboard extends React.Component {
       trends: [],
       currentTrend: '',
       twitterData:[
-        {label: 'positive', score: 90},
-        {label: 'negative', score: 10},
+        {label: 'positive', score: 50},
+        {label: 'negative', score: 50},
+      ],
+      facebookData:[
+        {label: 'positive', score: 50},
+        {label: 'negative', score: 50},
       ],
       publicSentiment: '',
       emotionalFeedback: '',
@@ -28,6 +32,9 @@ class Dashboard extends React.Component {
 
   componentDidMount () {
     this.getTrends();
+    this.updateChart(this.state.twitterData, '#twitterChart');
+    this.updateChart(this.state.twitterData, '#facebookChart');
+
     // setInterval(this.getTrends.bind(this), 3000);
   }
 
@@ -65,8 +72,8 @@ class Dashboard extends React.Component {
           })
         });
         console.log('New state is: ',context.state.twitterData);
-        d3.select('svg').remove();
-        context.updateChart(context.state.twitterData);
+        d3.select('#twitterChart').selectAll('svg').remove();
+        context.updateChart(context.state.twitterData, '#twitterChart');
       },
       dataType: 'json'
     });
@@ -136,7 +143,7 @@ class Dashboard extends React.Component {
     });
   }
 
-  updateChart (data) {
+  updateChart (data, id) {
     var width = 450, //960
         height = 450, //500
         radius = Math.min(width, height) / 2;
@@ -163,7 +170,7 @@ class Dashboard extends React.Component {
           return d.score;
         });
     //append both and svg and a g (group) element to the page. Move it over to the middle
-    var svg = d3.select('#chart').append('svg')
+    var svg = d3.select(id).append('svg')
               .attr('width', width)
               .attr('height', height)
               .append('g')
@@ -236,8 +243,10 @@ class Dashboard extends React.Component {
             </Row>
           </Col>
           <Col md={6} mdPull={6}>
+            <h2>Facebook Sentiment</h2>
+            <div id="facebookChart"></div>
             <h2>Twitter Sentiment</h2>
-            <Pie data={this.state.twitterData}/>
+            <div id="twitterChart"></div>
             <Button bsStyle="primary" bsSize="large" onClick={this.facebookGrab.bind(this, 'Kabali')} block>Update Chart  </Button>
           </Col>
         </Row>

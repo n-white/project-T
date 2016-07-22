@@ -21141,7 +21141,8 @@
 	    _this.state = {
 	      trends: [],
 	      currentTrend: '',
-	      twitterData: [{ label: 'positive', score: 90 }, { label: 'negative', score: 10 }],
+	      twitterData: [{ label: 'positive', score: 50 }, { label: 'negative', score: 50 }],
+	      facebookData: [{ label: 'positive', score: 50 }, { label: 'negative', score: 50 }],
 	      publicSentiment: '',
 	      emotionalFeedback: '',
 	      trendHistory: '',
@@ -21155,6 +21156,9 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.getTrends();
+	      this.updateChart(this.state.twitterData, '#twitterChart');
+	      this.updateChart(this.state.twitterData, '#facebookChart');
+
 	      // setInterval(this.getTrends.bind(this), 3000);
 	    }
 	  }, {
@@ -21194,8 +21198,8 @@
 	            })
 	          });
 	          console.log('New state is: ', context.state.twitterData);
-	          d3.select('svg').remove();
-	          context.updateChart(context.state.twitterData);
+	          d3.select('#twitterChart').selectAll('svg').remove();
+	          context.updateChart(context.state.twitterData, '#twitterChart');
 	        },
 	        dataType: 'json'
 	      });
@@ -21269,7 +21273,7 @@
 	    }
 	  }, {
 	    key: 'updateChart',
-	    value: function updateChart(data) {
+	    value: function updateChart(data, id) {
 	      var width = 450,
 	          //960
 	      height = 450,
@@ -21289,7 +21293,7 @@
 	        return d.score;
 	      });
 	      //append both and svg and a g (group) element to the page. Move it over to the middle
-	      var svg = d3.select('#chart').append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + "," + height / 2 + ')');
+	      var svg = d3.select(id).append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + "," + height / 2 + ')');
 
 	      //Apply data to pie and add g's on enter
 	      var g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
@@ -21405,9 +21409,15 @@
 	              _react2.default.createElement(
 	                'h2',
 	                null,
+	                'Facebook Sentiment'
+	              ),
+	              _react2.default.createElement('div', { id: 'facebookChart' }),
+	              _react2.default.createElement(
+	                'h2',
+	                null,
 	                'Twitter Sentiment'
 	              ),
-	              _react2.default.createElement(_Pie2.default, { data: this.state.twitterData }),
+	              _react2.default.createElement('div', { id: 'twitterChart' }),
 	              _react2.default.createElement(
 	                _reactBootstrap.Button,
 	                { bsStyle: 'primary', bsSize: 'large', onClick: this.facebookGrab.bind(this, 'Kabali'), block: true },
