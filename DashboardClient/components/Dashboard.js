@@ -132,8 +132,11 @@ class Dashboard extends React.Component {
       contentType: "application/json",
       success: function(d){
         console.log('response top tweet: ',d);
+        var tweet = map(d, function(item){
+          return item;
+        });
         context.setState({
-          representativeTweet: d
+          representativeTweet: tweet
         })
       },
       dataType: 'json'
@@ -247,7 +250,7 @@ class Dashboard extends React.Component {
         .attr("fill", function(d, i) { return color(i); })
         .attr("d", arc);
 
-    transition(1);
+    // transition(1);
 
     // copied code //
 
