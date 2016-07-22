@@ -300,6 +300,7 @@ schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **eonline)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **usweekly)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **popsci)
 
+
 while True:
     schedule.run_pending()
     time.sleep(1)

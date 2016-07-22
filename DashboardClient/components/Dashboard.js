@@ -102,10 +102,12 @@ class Dashboard extends React.Component {
       contentType: "application/json",
       success: function(d){
         var fbdata = map(d, function(value, prop){
-          return { 
-            label: prop,
-            score: value
-          };
+          if (value < 1) {
+            return { 
+              label: prop,
+              score: value
+            };
+          }
         })
         context.setState({
           facebookData: fbdata
@@ -218,8 +220,11 @@ class Dashboard extends React.Component {
     // emoDataset 
 
     // var dummyDataSet = [null, 20, 20, 20, 20, 20];
-
-    var dataFromServer = map(dataset, function(item){
+    console.log('this is the dataset: ', dataset)
+    var newDataset = dataset.slice(1);
+    console.log('this is the new and improved dataset: ', newDataset);
+    var dataFromServer = map(newDataset, function(item){
+      console.log(item)
       return item.score == null ? 0 : item.score;
     });
     var emoDataset = [null].concat(dataFromServer);
