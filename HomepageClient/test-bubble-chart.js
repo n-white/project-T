@@ -1,11 +1,11 @@
 $(document).ready(function () {
-  $.ajax({
-      type: "GET",
-      headers: {"Content-Type": "application/json", "Accept": "application/json"},
-      url: "http://www.example.org/ajax.php"
-  }).done(function (data) {
-      console.log(data);
-    });
+  // $.ajax({
+  //     type: "GET",
+  //     headers: {"Content-Type": "application/json", "Accept": "application/json"},
+  //     // url: "http://www.example.org/ajax.php"
+  // }).done(function (data) {
+  //     console.log(data);
+  //   });
 
 var bubbleChart = new d3.svg.BubbleChart({
     supportResponsive: true,
@@ -52,7 +52,7 @@ var bubbleChart = new d3.svg.BubbleChart({
           attr: {dy: "65px"},
           centralClick: function(item) {
             // alert("Here is more details: " + item.text + "!!");
-            window.location.href = 'http://google.com';
+            window.location.href = 'http://localhost:3000/';
             // console.log()
           }
         }
