@@ -21110,7 +21110,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Pie = __webpack_require__(174);
+	var _Pie = __webpack_require__(175);
 
 	var _Pie2 = _interopRequireDefault(_Pie);
 
@@ -31479,110 +31479,6 @@
 
 /***/ },
 /* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(d3) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(33);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _reactFauxDom = __webpack_require__(176);
-
-	var _reactFauxDom2 = _interopRequireDefault(_reactFauxDom);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// import d3 from 'd3/build/d3.min.js';
-
-	var Pie = function (_React$Component) {
-	  _inherits(Pie, _React$Component);
-
-	  function Pie(props) {
-	    _classCallCheck(this, Pie);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Pie).call(this, props));
-	  }
-
-	  _createClass(Pie, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      // console.log(this.props.data);
-	      this.updateChart(this.props.data);
-	    }
-	  }, {
-	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate() {}
-	  }, {
-	    key: 'updateChart',
-	    value: function updateChart(data) {
-	      var width = 450,
-	          //960
-	      height = 450,
-	          //500
-	      radius = Math.min(width, height) / 2;
-
-	      //Ordinal scale w/ default domain and colors for range
-	      var color = d3.scaleOrdinal().range(["#128085", "#C74029", "#FAE8CD", "#385052", "#F0AD44"]);
-
-	      //create arc data (to define path svg)
-	      var arc = d3.arc().outerRadius(radius - 10).innerRadius(0);
-
-	      var labelArc = d3.arc().outerRadius(radius - 10).innerRadius(0);
-
-	      //create pie layout order data
-	      var pie = d3.pie().sort(null).value(function (d) {
-	        return d.population;
-	      });
-	      //append both and svg and a g (group) element to the page. Move it over to the middle
-	      var svg = d3.select('#chart').append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + "," + height / 2 + ')');
-
-	      //Apply data to pie and add g's on enter
-	      var g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
-
-	      //put a path element in the g, give it a d attribute of the previously defined arc path. Grab its color from the scale range
-	      g.append('path').attr('d', arc).style('fill', function (d) {
-	        return color(d.data.age);
-	      });
-
-	      //put svg text elements on each g. Use the cenrtroid method to position center of the slice. Shift the dy positioning. Pull text from data
-	      g.append('text').attr('transform', function (d) {
-	        return 'translate(' + labelArc.centroid(d) + ')';
-	      }).attr('dy', '.35em').attr('dx', '-.8em').attr('font-size', '15px').text(function (d) {
-	        return d.data.age;
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement('div', { id: 'chart' });
-	    }
-	  }]);
-
-	  return Pie;
-	}(_react2.default.Component);
-
-	exports.default = Pie;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(175)))
-
-/***/ },
-/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// https://d3js.org Version 4.1.1. Copyright 2016 Mike Bostock.
@@ -47779,6 +47675,110 @@
 	  Object.defineProperty(exports, '__esModule', { value: true });
 
 	}));
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(d3) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(33);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactFauxDom = __webpack_require__(176);
+
+	var _reactFauxDom2 = _interopRequireDefault(_reactFauxDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// import d3 from 'd3/build/d3.min.js';
+
+	var Pie = function (_React$Component) {
+	  _inherits(Pie, _React$Component);
+
+	  function Pie(props) {
+	    _classCallCheck(this, Pie);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Pie).call(this, props));
+	  }
+
+	  _createClass(Pie, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // console.log(this.props.data);
+	      this.updateChart(this.props.data);
+	    }
+	  }, {
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate() {}
+	  }, {
+	    key: 'updateChart',
+	    value: function updateChart(data) {
+	      var width = 450,
+	          //960
+	      height = 450,
+	          //500
+	      radius = Math.min(width, height) / 2;
+
+	      //Ordinal scale w/ default domain and colors for range
+	      var color = d3.scaleOrdinal().range(["#128085", "#C74029", "#FAE8CD", "#385052", "#F0AD44"]);
+
+	      //create arc data (to define path svg)
+	      var arc = d3.arc().outerRadius(radius - 10).innerRadius(0);
+
+	      var labelArc = d3.arc().outerRadius(radius - 10).innerRadius(0);
+
+	      //create pie layout order data
+	      var pie = d3.pie().sort(null).value(function (d) {
+	        return d.population;
+	      });
+	      //append both and svg and a g (group) element to the page. Move it over to the middle
+	      var svg = d3.select('#chart').append('svg').attr('width', width).attr('height', height).append('g').attr('transform', 'translate(' + width / 2 + "," + height / 2 + ')');
+
+	      //Apply data to pie and add g's on enter
+	      var g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
+
+	      //put a path element in the g, give it a d attribute of the previously defined arc path. Grab its color from the scale range
+	      g.append('path').attr('d', arc).style('fill', function (d) {
+	        return color(d.data.age);
+	      });
+
+	      //put svg text elements on each g. Use the cenrtroid method to position center of the slice. Shift the dy positioning. Pull text from data
+	      g.append('text').attr('transform', function (d) {
+	        return 'translate(' + labelArc.centroid(d) + ')';
+	      }).attr('dy', '.35em').attr('dx', '-.8em').attr('font-size', '15px').text(function (d) {
+	        return d.data.age;
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement('div', { id: 'chart' });
+	    }
+	  }]);
+
+	  return Pie;
+	}(_react2.default.Component);
+
+	exports.default = Pie;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(174)))
 
 /***/ },
 /* 176 */
