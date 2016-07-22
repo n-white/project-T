@@ -26,11 +26,14 @@ class Dashboard extends React.Component {
       emotionalFeedback: '',
       trendHistory: '',
       representativeTweet: '',
-      representativeNewsSource: ''
+      representativeNewsSource: '',
+      twitterSpinner: false,
+      facebookSpinner: false //not likely to be needed
     }
   }
 
   componentDidMount () {
+    //start everything
     this.getTrends();
     this.updateChart(this.state.twitterData, '#twitterChart');
     this.updateChart(this.state.twitterData, '#facebookChart');
@@ -39,6 +42,7 @@ class Dashboard extends React.Component {
   }
 
   getTrends () {
+    //pull in data from google trends to populate dropdown menu
     var context = this;
     $.get('http://localhost:3000/trends', function(data){
       // console.log('!@#$!@#!@#',context);
@@ -50,11 +54,12 @@ class Dashboard extends React.Component {
   }
 
   twitterGrab (q) {
+    //pull in twitter data from watson to populate twitter chart
     var context = this;
     this.setState({
-      currentTrend: q
+      currentTrend: q,
+      twitterSpinner: true
     })
-
     // console.log(q, this);
     $.ajax({
       method: "POST",
@@ -69,7 +74,8 @@ class Dashboard extends React.Component {
               label: prop,
               score: value
             };
-          })
+          }),
+          twitterSpinner: false
         });
         console.log('New state is: ',context.state.twitterData);
         d3.select('#twitterChart').selectAll('svg').remove();
@@ -80,11 +86,11 @@ class Dashboard extends React.Component {
   }
 
   facebookGrab (q) {
-
+    //grab facebook data for fb chart
     this.setState({
       currentTrend: q
     })
-
+    var context = this;
     // console.log(q, this);
     $.ajax({
       method: "POST",
@@ -92,13 +98,25 @@ class Dashboard extends React.Component {
       data: JSON.stringify({q: q}),
       contentType: "application/json",
       success: function(d){
-        console.log('response fb: ', d);
+        var fbdata = map(d, function(value, prop){
+          return { 
+            label: prop,
+            score: value === null ? 1 : value
+          };
+        })
+        context.setState({
+          facebookData: fbdata
+        });
+        console.log('response fb mapped: ', fbdata);
+        d3.select('#facebookChart').selectAll('svg').remove();
+        context.updateChart(context.state.facebookData, '#facebookChart');
       },
       dataType: 'json'
     });
   }
 
   topTweetGrab (q) {
+    //grab top tweet data to populate representative tweet panel
     var context = this;
     this.setState({
       currentTrend: q
@@ -121,32 +139,13 @@ class Dashboard extends React.Component {
   }
 
   allDataGrab (q) {
+    //update everything (when new trend is selected)
     this.setState({
       currentTrend: q
     })
     this.topTweetGrab(q);
     this.facebookGrab(q);
     this.twitterGrab(q);
-  }
-
-  fetchData () {
-    var context = this;
-    $.ajax({
-      method:'GET',
-      url:'http://localhost:3000/trends',
-      contentType: "application/json",
-    })
-    .done(function(data){
-      context.setState({
-        data: data.data,
-        publicSentiment: data.publicSentiment,
-        emotionalFeedback: '',
-        trendHistory: '',
-        representativeTweet: '',
-        representativeNewsSource: ''
-      })
-      console.log('!!',this.state);
-    });
   }
 
   updateChart (data, id) {
@@ -156,7 +155,7 @@ class Dashboard extends React.Component {
 
     //Ordinal scale w/ default domain and colors for range
     var color = d3.scaleOrdinal()
-        .range(["#128085","#C74029","#FAE8CD","#385052","#F0AD44"]);
+        .range(["#F0AD44","#128085","#FAE8CD","#385052","#C74029"]);
 
 
 
@@ -235,9 +234,9 @@ class Dashboard extends React.Component {
           </Navbar>
         </Row>
         <Row>
+          <Col xs={6} md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="(Need to figure out this data)"/></Col>
           <Col xs={6} md={4}><Tab info={this.state.publicSentiment} header="Public Sentiment" sub="(Twitter Sentiment)"/></Col>
           <Col xs={6} md={4}><Tab info={this.state.emotionalFeedback} header="Emotional Feedback" sub="(Facebook Reactions)"/></Col>
-          <Col xsHidden md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="(Need to figure out this data)"/></Col>
         </Row>
         <Row>
           <Col md={6} mdPush={6}>
@@ -249,11 +248,11 @@ class Dashboard extends React.Component {
             </Row>
           </Col>
           <Col md={6} mdPull={6}>
-            <h2>Twitter Sentiment</h2>
-            <div id="twitterChart"></div>
+            <h2 >Twitter Sentiment</h2>
+            <div id="twitterChart" style={this.state.twitterSpinner ? {backgroundImage: 'url(styles/spiffygif_46x46.gif)', 'background-repeat':'no-repeat'} : {backgroundImage: 'none'}}></div>
             <h2>Facebook Sentiment</h2>
             <div id="facebookChart"></div>
-            <Button bsStyle="primary" bsSize="large" onClick={this.facebookGrab.bind(this, 'Kabali')} block>Update Chart  </Button>
+            <Button bsStyle="primary" bsSize="large" onClick={this.allDataGrab.bind(this, this.state.currentTrend)} block>Update Chart  </Button>
           </Col>
         </Row>
         <Row>

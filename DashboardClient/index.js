@@ -21147,7 +21147,9 @@
 	      emotionalFeedback: '',
 	      trendHistory: '',
 	      representativeTweet: '',
-	      representativeNewsSource: ''
+	      representativeNewsSource: '',
+	      twitterSpinner: false,
+	      facebookSpinner: false //not likely to be needed
 	    };
 	    return _this;
 	  }
@@ -21155,6 +21157,7 @@
 	  _createClass(Dashboard, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      //start everything
 	      this.getTrends();
 	      this.updateChart(this.state.twitterData, '#twitterChart');
 	      this.updateChart(this.state.twitterData, '#facebookChart');
@@ -21164,6 +21167,7 @@
 	  }, {
 	    key: 'getTrends',
 	    value: function getTrends() {
+	      //pull in data from google trends to populate dropdown menu
 	      var context = this;
 	      $.get('http://localhost:3000/trends', function (data) {
 	        // console.log('!@#$!@#!@#',context);
@@ -21176,11 +21180,12 @@
 	  }, {
 	    key: 'twitterGrab',
 	    value: function twitterGrab(q) {
+	      //pull in twitter data from watson to populate twitter chart
 	      var context = this;
 	      this.setState({
-	        currentTrend: q
+	        currentTrend: q,
+	        twitterSpinner: true
 	      });
-
 	      // console.log(q, this);
 	      $.ajax({
 	        method: "POST",
@@ -21195,7 +21200,8 @@
 	                label: prop,
 	                score: value
 	              };
-	            })
+	            }),
+	            twitterSpinner: false
 	          });
 	          console.log('New state is: ', context.state.twitterData);
 	          d3.select('#twitterChart').selectAll('svg').remove();
@@ -21207,11 +21213,11 @@
 	  }, {
 	    key: 'facebookGrab',
 	    value: function facebookGrab(q) {
-
+	      //grab facebook data for fb chart
 	      this.setState({
 	        currentTrend: q
 	      });
-
+	      var context = this;
 	      // console.log(q, this);
 	      $.ajax({
 	        method: "POST",
@@ -21219,7 +21225,18 @@
 	        data: JSON.stringify({ q: q }),
 	        contentType: "application/json",
 	        success: function success(d) {
-	          console.log('response fb: ', d);
+	          var fbdata = map(d, function (value, prop) {
+	            return {
+	              label: prop,
+	              score: value === null ? 1 : value
+	            };
+	          });
+	          context.setState({
+	            facebookData: fbdata
+	          });
+	          console.log('response fb mapped: ', fbdata);
+	          d3.select('#facebookChart').selectAll('svg').remove();
+	          context.updateChart(context.state.facebookData, '#facebookChart');
 	        },
 	        dataType: 'json'
 	      });
@@ -21227,6 +21244,7 @@
 	  }, {
 	    key: 'topTweetGrab',
 	    value: function topTweetGrab(q) {
+	      //grab top tweet data to populate representative tweet panel
 	      var context = this;
 	      this.setState({
 	        currentTrend: q
@@ -21250,32 +21268,13 @@
 	  }, {
 	    key: 'allDataGrab',
 	    value: function allDataGrab(q) {
+	      //update everything (when new trend is selected)
 	      this.setState({
 	        currentTrend: q
 	      });
 	      this.topTweetGrab(q);
 	      this.facebookGrab(q);
 	      this.twitterGrab(q);
-	    }
-	  }, {
-	    key: 'fetchData',
-	    value: function fetchData() {
-	      var context = this;
-	      $.ajax({
-	        method: 'GET',
-	        url: 'http://localhost:3000/trends',
-	        contentType: "application/json"
-	      }).done(function (data) {
-	        context.setState({
-	          data: data.data,
-	          publicSentiment: data.publicSentiment,
-	          emotionalFeedback: '',
-	          trendHistory: '',
-	          representativeTweet: '',
-	          representativeNewsSource: ''
-	        });
-	        console.log('!!', this.state);
-	      });
 	    }
 	  }, {
 	    key: 'updateChart',
@@ -21287,7 +21286,7 @@
 	      radius = Math.min(width, height) / 2;
 
 	      //Ordinal scale w/ default domain and colors for range
-	      var color = d3.scaleOrdinal().range(["#128085", "#C74029", "#FAE8CD", "#385052", "#F0AD44"]);
+	      var color = d3.scaleOrdinal().range(["#F0AD44", "#128085", "#FAE8CD", "#385052", "#C74029"]);
 
 	      //create arc data (to define path svg)
 	      var arc = d3.arc().outerRadius(radius - 10).innerRadius(0);
@@ -21379,17 +21378,17 @@
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
 	              { xs: 6, md: 4 },
+	              _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: this.state.currentTrend, sub: '(Need to figure out this data)' })
+	            ),
+	            _react2.default.createElement(
+	              _reactBootstrap.Col,
+	              { xs: 6, md: 4 },
 	              _react2.default.createElement(_Tab2.default, { info: this.state.publicSentiment, header: 'Public Sentiment', sub: '(Twitter Sentiment)' })
 	            ),
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
 	              { xs: 6, md: 4 },
 	              _react2.default.createElement(_Tab2.default, { info: this.state.emotionalFeedback, header: 'Emotional Feedback', sub: '(Facebook Reactions)' })
-	            ),
-	            _react2.default.createElement(
-	              _reactBootstrap.Col,
-	              { xsHidden: true, md: 4 },
-	              _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: this.state.currentTrend, sub: '(Need to figure out this data)' })
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -21417,7 +21416,7 @@
 	                null,
 	                'Twitter Sentiment'
 	              ),
-	              _react2.default.createElement('div', { id: 'twitterChart' }),
+	              _react2.default.createElement('div', { id: 'twitterChart', style: this.state.twitterSpinner ? { backgroundImage: 'url(styles/spiffygif_46x46.gif)', 'background-repeat': 'no-repeat' } : { backgroundImage: 'none' } }),
 	              _react2.default.createElement(
 	                'h2',
 	                null,
@@ -21426,7 +21425,7 @@
 	              _react2.default.createElement('div', { id: 'facebookChart' }),
 	              _react2.default.createElement(
 	                _reactBootstrap.Button,
-	                { bsStyle: 'primary', bsSize: 'large', onClick: this.facebookGrab.bind(this, 'Kabali'), block: true },
+	                { bsStyle: 'primary', bsSize: 'large', onClick: this.allDataGrab.bind(this, this.state.currentTrend), block: true },
 	                'Update Chart  '
 	              )
 	            )
