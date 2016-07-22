@@ -7,7 +7,6 @@ import datetime
 from dateutil.parser import parse as parse_date
 import schedule
 import time
-# import argv
 
 app_id = "605873279587083"
 app_secret = "1e0e1365da5716e80b1eb898b73dd9cb" # DO NOT SHARE WITH ANYONE!

@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var cron = require('node-cron');
 var exec = require('child_process').exec;
+var spawn = require("child_process").spawn;
 
 
 var app = express();
@@ -29,8 +30,8 @@ var task = cron.schedule('* * * * *', function() {
 }, false);
 
 
-var test = cron.schedule('* * * * *', function() {
-  console.log('Update CSV running is still running');
+var csvScheduler = cron.schedule('* * * * *', function() {
+  console.log('Update CSV running');
   exec(__dirname + '/updateCSV.sh', function(error, stdout, stderr) {
       console.log('stdout: ', stdout);
       console.log('stderr: ', stderr);
@@ -41,9 +42,15 @@ var test = cron.schedule('* * * * *', function() {
 }, false);
 
 
+var facebookScrapeScheduler = cron.schedule('* * * * *', function() {
+  console.log('Facebook Scraper running');
+	var process = spawn('python',['/facebookScraper/fbScrape.py']);
+}, false);
+
+
 
 
 task.start();
-test.start();
+facebookScrapeScheduler.start();
 
 
