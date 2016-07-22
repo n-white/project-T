@@ -42,15 +42,15 @@ var csvScheduler = cron.schedule('* * * * *', function() {
 }, false);
 
 
-var facebookScrapeScheduler = cron.schedule('* * * * *', function() {
+var facebookScrapeScheduler = cron.schedule('* /5 * * * *', function() {
   console.log('Facebook Scraper running');
-	var process = spawn('python',['/facebookScraper/fbScrape.py']);
+    var process = spawn('python',['/facebookScraper/fbScrape.py']);
 }, false);
 
 
 
 
 task.start();
+csvScheduler.start();
 facebookScrapeScheduler.start();
-
 
