@@ -125,7 +125,7 @@ module.exports = {
 			if (error) {
 				throw error
 			} else {
-				res.json({1: tweets.statuses[0].text, 2: tweets.statuses[1].text, 3: tweets.statuses[2].text});
+				res.json({1: tweets.statuses[0].text});
 			}
 		});		
 	}
