@@ -28,7 +28,6 @@ var task = cron.schedule('* * * * *', function() {
   console.log('Server is still running');
 }, false);
 
-
 var test = cron.schedule('* * * * *', function() {
   console.log('Update CSV running is still running');
   exec(__dirname + '/updateCSV.sh', function(error, stdout, stderr) {
@@ -39,9 +38,6 @@ var test = cron.schedule('* * * * *', function() {
       }
   });
 }, false);
-
-
-
 
 task.start();
 test.start();

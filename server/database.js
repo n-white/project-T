@@ -32,6 +32,8 @@ var FB_Sentiments = sequelize.define('FB_Sentiments', {
    timestamps: false
 });
 
+FB_Sentiments.removeAttribute('id');
+
 // var Trend_Popularity = sequelize.define('Trend_Popularity', {
 //   popularity: Sequelize.INTEGER,
 //   time: Sequelize.DATE
