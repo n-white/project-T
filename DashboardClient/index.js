@@ -21142,7 +21142,7 @@
 	      trends: [],
 	      currentTrend: 'Select Trend',
 	      twitterData: [{ label: 'positive', score: 50 }, { label: 'negative', score: 50 }],
-	      facebookData: [{ label: 'positive', score: 50 }, { label: 'negative', score: 50 }],
+	      facebookData: [{ label: 'loves', score: 20 }, { label: 'wows', score: 20 }, { label: 'hahas', score: 20 }, { label: 'sads', score: 20 }, { label: 'angrys', score: 20 }],
 	      publicSentiment: '',
 	      emotionalFeedback: '',
 	      trendHistory: '',
@@ -21329,8 +21329,10 @@
 
 	      // emoDataset 
 
+	      // var dummyDataSet = [null, 20, 20, 20, 20, 20];
+
 	      var dataFromServer = map(dataset, function (item) {
-	        return item.score;
+	        return item.score == null ? 0 : item.score;
 	      });
 	      var emoDataset = [null].concat(dataFromServer);
 	      console.log('emoDataset', emoDataset);
@@ -21357,7 +21359,7 @@
 	        return color(i);
 	      }).attr("d", arc);
 
-	      // transition(1);
+	      transition(1);
 
 	      // copied code //
 
@@ -21377,53 +21379,52 @@
 
 	      // end copied code //
 
-	      // function transition(state) {
-	      //   var path = d3.select('#facebookChart').selectAll(".arc > path")
-	      //       .data(state ? arcs(data0, data1) : arcs(data1, data0));
+	      function transition(state) {
+	        var path = d3.select('#facebookChart').selectAll(".arc > path").data(state ? arcs(data0, data1) : arcs(data1, data0));
 
-	      //   var t0 = path.transition()
-	      //       .duration(500)
-	      //       .attrTween("d", tweenArc(function(d, i) {
-	      //         return {
-	      //           innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
-	      //           outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
-	      //         };
-	      //       }));
+	        var t0 = path.transition().duration(500).attrTween("d", tweenArc(function (d, i) {
+	          return {
+	            innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+	            outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
+	          };
+	        }));
 
-	      //   var t1 = t0.transition()
-	      //       .attrTween("d", tweenArc(function(d, i) {
-	      //         var a0 = d.next.startAngle + d.next.endAngle,
-	      //             a1 = d.startAngle - d.endAngle;
-	      //         return {
-	      //           startAngle: (a0 + a1) / 2,
-	      //           endAngle: (a0 - a1) / 2
-	      //         };
-	      //       }));
+	        var t1 = t0.transition().attrTween("d", tweenArc(function (d, i) {
+	          var a0 = d.next.startAngle + d.next.endAngle,
+	              a1 = d.startAngle - d.endAngle;
+	          return {
+	            startAngle: (a0 + a1) / 2,
+	            endAngle: (a0 - a1) / 2
+	          };
+	        }));
 
-	      //   var t2 = t1.transition()
-	      //         .attrTween("d", tweenArc(function(d, i) {
-	      //           return {
-	      //             startAngle: d.next.startAngle,
-	      //             endAngle: d.next.endAngle
-	      //           };
-	      //         }));
+	        var t2 = t1.transition().attrTween("d", tweenArc(function (d, i) {
+	          return {
+	            startAngle: d.next.startAngle,
+	            endAngle: d.next.endAngle
+	          };
+	        }));
 
-	      //   var t3 = t2.transition()
-	      //       .attrTween("d", tweenArc(function(d, i) {
-	      //         return {
-	      //           innerRadius: innerRadius,
-	      //           outerRadius: outerRadius
-	      //         };
-	      //       }));
-	      // }
+	        var t3 = t2.transition().attrTween("d", tweenArc(function (d, i) {
+	          return {
+	            innerRadius: innerRadius,
+	            outerRadius: outerRadius
+	          };
+	        }));
+	      }
 
-	      // function tweenArc(b) {
-	      //   return function(a, i) {
-	      //     var d = b.call(this, a, i), i = d3.interpolate(a, d);
-	      //     for (var k in d) a[k] = d[k]; // update data
-	      //     return function(t) { return arc(i(t)); };
-	      //   };
-	      // }
+	      function tweenArc(b) {
+	        return function (a, i) {
+	          var d = b.call(this, a, i),
+	              i = d3.interpolate(a, d);
+	          for (var k in d) {
+	            a[k] = d[k];
+	          } // update data
+	          return function (t) {
+	            return arc(i(t));
+	          };
+	        };
+	      }
 	    }
 	  }, {
 	    key: 'render',
