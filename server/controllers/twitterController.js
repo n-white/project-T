@@ -94,11 +94,12 @@ module.exports = {
 								if (data.type === 'positive') {
 									positive = (1 + Number(data.score)) / 2;
 									negative = 1 - positive;
+									res.send({summary: 'mostly positive', positive: positive, negative: negative});									
 								} else {
 									negative = Math.abs((Number(data.score) - 1) / 2);
 									positive = 1 - negative;
+									res.send({summary: 'mostly negative', positive: positive, negative: negative});
 								}
-								res.send({positive: positive, negative: negative});
 							});
 							
 						});
@@ -125,7 +126,7 @@ module.exports = {
 			if (error) {
 				throw error
 			} else {
-				res.json({1: tweets.statuses[0].text});
+				res.json({1: tweets.statuses[0].text, 2: tweets.statuses[1].text});
 			}
 		});		
 	}

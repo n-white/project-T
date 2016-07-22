@@ -20,8 +20,6 @@ module.exports = {
 			}
 		})
 
-		console.log('098172349012387490182734', largestKeyword);
-
 		// Search the database for articles that contain the selected trend
 		db.FB_Sentiments.findAll({where: {status_message: {like: '%' + largestKeyword + '%'}}}).then(function(data) {
 			
@@ -65,21 +63,39 @@ module.exports = {
 
 			// Declare a Top Article which we'll pass to the front end
 			var topArticle = {title: 'No relevant news articles found', likes: 0}
+			var secondArticle = {title: 'No Relevant news articles found', likes: 0}
 
 			// Update the tempObj with all of the headlines found
 			// Update the topArticle with the headline that has the most number of likes
 			data.forEach(function(item, index) {
 				tempObj[index] = 'likes: ' + item.dataValues.num_likes + ': ' + item.dataValues.status_message;
 				if (item.dataValues.num_likes > topArticle.likes) {
+					secondArticle.title = topArticle.title;
+					secondArticle.likes = topArticle.likes;
 					topArticle.title = item.dataValues.status_message;
 					topArticle.likes = item.dataValues.num_likes;
 				}
 			})
 
-			// Log the headlines to the console (for backend testing purposes)
-			console.log('!!!!!!!!!!', tempObj, '???????????', topArticle);
+			// Find the most dominant facebook reaction
+			
+			var tempReactions = [[num_wows, 'mostly surprised'], [num_hahas, 'mostly amused'], [num_sads, 'mostly sad'], [num_angrys, 'mostly angry'], [num_loves, 'mostly loves']];
+			tempReactions = tempReactions.sort(function(a,b) {
+				if (a[0] < b[0]) {
+					return 1;
+				} else if (a[0] > b[0]) {
+					return -1;
+				} else if (a[0] == b[0]) {
+					return 0;
+				}
+			})
 
-			var summary = {topHeadline: topArticle.title, likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
+			// Log the headlines to the console (for backend testing purposes)
+			// console.log('!!!!!!!!!!', tempObj, '???????????', topArticle);
+
+			var summary = {summary: tempReactions[0][1], topHeadline: topArticle.title, secondHeadline: secondArticle.title, likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
+
+			console.log(summary)
 
 			res.send(summary)
 

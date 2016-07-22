@@ -221,7 +221,7 @@ class Dashboard extends React.Component {
 
     // var dummyDataSet = [null, 20, 20, 20, 20, 20];
     console.log('this is the dataset: ', dataset)
-    var newDataset = dataset.slice(1);
+    var newDataset = dataset.slice(3);
     console.log('this is the new and improved dataset: ', newDataset);
     var dataFromServer = map(newDataset, function(item){
       console.log(item)
