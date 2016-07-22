@@ -1,14 +1,13 @@
 $(document).ready(function () {
-​
   $.ajax({
       type: "GET",
       headers: {"Content-Type": "application/json", "Accept": "application/json"},
       url: "http://www.example.org/ajax.php"
   }).done(function (data) {
       console.log(data);
-  });
-​
-  var bubbleChart = new d3.svg.BubbleChart({
+    });
+
+var bubbleChart = new d3.svg.BubbleChart({
     supportResponsive: true,
     //container: => use @default
     size: 750,
