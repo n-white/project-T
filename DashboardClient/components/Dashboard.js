@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       trends: [],
-      currentTrend: '',
+      currentTrend: 'Select Trend',
       twitterData:[
         {label: 'positive', score: 50},
         {label: 'negative', score: 50},
@@ -55,7 +55,7 @@ class Dashboard extends React.Component {
       currentTrend: q
     })
 
-    console.log(q, this);
+    // console.log(q, this);
     $.ajax({
       method: "POST",
       url: 'http://localhost:3000/grabTweets',
@@ -85,7 +85,7 @@ class Dashboard extends React.Component {
       currentTrend: q
     })
 
-    console.log(q, this);
+    // console.log(q, this);
     $.ajax({
       method: "POST",
       url: 'http://localhost:3000/grabFbook',
@@ -99,12 +99,12 @@ class Dashboard extends React.Component {
   }
 
   topTweetGrab (q) {
-
+    var context = this;
     this.setState({
       currentTrend: q
     })
 
-    console.log(q, this);
+    // console.log(q, this);
     $.ajax({
       method: "POST",
       url: 'http://localhost:3000/grabTopTweet',
@@ -112,12 +112,18 @@ class Dashboard extends React.Component {
       contentType: "application/json",
       success: function(d){
         console.log('response top tweet: ',d);
+        context.setState({
+          representativeTweet: d
+        })
       },
       dataType: 'json'
     });
   }
 
   allDataGrab (q) {
+    this.setState({
+      currentTrend: q
+    })
     this.topTweetGrab(q);
     this.facebookGrab(q);
     this.twitterGrab(q);
@@ -231,22 +237,22 @@ class Dashboard extends React.Component {
         <Row>
           <Col xs={6} md={4}><Tab info={this.state.publicSentiment} header="Public Sentiment" sub="(Twitter Sentiment)"/></Col>
           <Col xs={6} md={4}><Tab info={this.state.emotionalFeedback} header="Emotional Feedback" sub="(Facebook Reactions)"/></Col>
-          <Col xsHidden md={4}><Tab info={this.state.trendHistory} header="Trend History" sub="(Need to figure out this data)"/></Col>
+          <Col xsHidden md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="(Need to figure out this data)"/></Col>
         </Row>
         <Row>
           <Col md={6} mdPush={6}>
             <Row>  
-              <Tab info={this.state.trendHistory} header="Representative Tweet" sub="(Need to figure out this data)" />
+              <Tab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet} />
             </Row>
             <Row>
               <Tab info={this.state.trendHistory} header="Representative News Source" sub="(Need to figure out this data)" />
             </Row>
           </Col>
           <Col md={6} mdPull={6}>
-            <h2>Facebook Sentiment</h2>
-            <div id="facebookChart"></div>
             <h2>Twitter Sentiment</h2>
             <div id="twitterChart"></div>
+            <h2>Facebook Sentiment</h2>
+            <div id="facebookChart"></div>
             <Button bsStyle="primary" bsSize="large" onClick={this.facebookGrab.bind(this, 'Kabali')} block>Update Chart  </Button>
           </Col>
         </Row>
