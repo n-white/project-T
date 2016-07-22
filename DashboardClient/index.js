@@ -21149,7 +21149,8 @@
 	      representativeTweet: '',
 	      representativeNewsSource: '',
 	      twitterSpinner: false,
-	      facebookSpinner: false //not likely to be needed
+	      facebookSpinner: false, //not likely to be needed
+	      twitterSummary: ''
 	    };
 	    return _this;
 	  }
@@ -21195,13 +21196,9 @@
 	        success: function success(d) {
 	          console.log('response tweet: ', d);
 	          context.setState({
-	            twitterData: map(d, function (value, prop) {
-	              return {
-	                label: prop,
-	                score: value
-	              };
-	            }),
-	            twitterSpinner: false
+	            twitterData: [{ label: 'positive', score: d.positive }, { label: 'negative', score: d.negative }],
+	            twitterSpinner: false,
+	            twitterSummary: d.summary
 	          });
 	          console.log('New state is: ', context.state.twitterData);
 	          d3.select('#twitterChart').selectAll('svg').remove();
@@ -21333,7 +21330,7 @@
 
 	      // var dummyDataSet = [null, 20, 20, 20, 20, 20];
 	      console.log('this is the dataset: ', dataset);
-	      var newDataset = dataset.slice(3);
+	      var newDataset = dataset.slice(4);
 	      console.log('this is the new and improved dataset: ', newDataset);
 	      var dataFromServer = map(newDataset, function (item) {
 	        console.log(item);
@@ -21499,7 +21496,7 @@
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
 	              { xs: 6, md: 4 },
-	              _react2.default.createElement(_Tab2.default, { info: this.state.publicSentiment, header: 'Public Sentiment', sub: '(Twitter Sentiment)' })
+	              _react2.default.createElement(_Tab2.default, { info: this.state.publicSentiment, header: 'Twitter Summary', sub: this.state.twitterSummary })
 	            ),
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
