@@ -63,7 +63,7 @@ module.exports = {
 
 			// Declare a Top Article which we'll pass to the front end
 			var topArticle = {title: 'No relevant news articles found', likes: 0}
-			var secondArticle = {title: 'No Relevant news articles found', likes: 0}
+			var secondArticle = {title: '', likes: 0}
 
 			// Update the tempObj with all of the headlines found
 			// Update the topArticle and secondArticle with the headlines that have the most number of likes
@@ -79,7 +79,7 @@ module.exports = {
 
 			// Find the most dominant facebook reaction
 			
-			var tempReactions = [[num_wows, 'mostly surprised'], [num_hahas, 'mostly amused'], [num_sads, 'mostly sad'], [num_angrys, 'mostly angry'], [num_loves, 'mostly loves']];
+			var tempReactions = [[num_wows, 'mostly surprised'], [num_hahas, 'mostly amused'], [num_sads, 'mostly sad'], [num_angrys, 'mostly angry'], [num_loves, 'mostly loved']];
 			tempReactions = tempReactions.sort(function(a,b) {
 				if (a[0] < b[0]) {
 					return 1;

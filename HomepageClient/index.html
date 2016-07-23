@@ -29,19 +29,48 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
   <script src="app.js"></script>
 ​
-<!--   <h1>Trendwave Top Results</h1> -->
-<!--   <div ng-controller='appController'>
-    <div ng-repeat='trend in trends'><button ng-click="twitterGrab(trend)">{{ trend }}</button></div>
-  </div> -->
+  <script>
+    
+    $(document).ready(function () {
+
+      window.trends = []
+
+      $.get('http://localhost:3000/trends', function(data){
+        
+        window.trends = []
+        // [{ text: 'Britney Spears', count: '90' },
+        //   { text: 'Britney Things', count: '55' },
+        //   { text: 'Britney Law', count: '56' },
+        //   { text: 'Britney Perry Rise', count: '39' },
+        //   { text: 'Britney Classic Edition', count: '32' },
+        //   { text: 'Britney Hamrick', count: '40' },
+        //   { text: 'Britney Strawberry', count: '38' },
+        //   { text: 'Britney Tower', count: '75' },
+        //   { text: 'Britney Mathers', count: '24' },
+        //   { text: 'Britney Noble', count: '1' },
+        //   { text: 'Britney', count: '23' }
+        // ];
+
+        window.test = []
+
+        for (var i = 0; i < 9; i++) {
+          window.trends.push({text: data[i], count: '90'})
+        }
+
+        console.log(window.trends);
 
 
+      });
 
-<!--   <a id="dashboard" href="http://localhost:3000/dashboard"> -->
+    })
 
+  </script>
 
   <div id='wrapper'>
     <div class="bubbleChart" id='svg'>
+      
       <script src="test-bubble-chart.js"></script>
+
     </div>
   </div>
   </a>
