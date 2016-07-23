@@ -21521,7 +21521,7 @@
 	              _react2.default.createElement(
 	                _reactBootstrap.Row,
 	                null,
-	                _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: 'Representative Tweet', sub: this.state.representativeTweet })
+	                _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: 'Representative Tweet', sub: this.state.representativeTweet[0], sub2: this.state.representativeTweet[1] })
 	              ),
 	              _react2.default.createElement(
 	                _reactBootstrap.Row,

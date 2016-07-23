@@ -374,7 +374,7 @@ class Dashboard extends React.Component {
           <Row>
             <Col md={6} mdPush={6}>
               <Row>  
-                <Tab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet} />
+                <Tab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet[0]} sub2={this.state.representativeTweet[1]} />
               </Row>
               <Row>
                 <Tab info={this.state.trendHistory} header="Representative Facebook Headlines" sub={this.state.facebookTopHeadlines[0]} sub2={this.state.facebookTopHeadlines[1]}/>
