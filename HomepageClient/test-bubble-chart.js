@@ -19,6 +19,7 @@ var bubbleChart = new d3.svg.BubbleChart({
     //intersectDelta: use @default
     //intersectInc: use @default
     //circleColor: use @default
+
     data: {
       items: [
         { text: 'Britney Spears', count: '90' },
@@ -52,7 +53,7 @@ var bubbleChart = new d3.svg.BubbleChart({
           attr: {dy: "65px"},
           centralClick: function(item) {
             // alert("Here is more details: " + item.text + "!!");
-            window.location.href = 'http://localhost:3000/';
+            window.location.href = 'http://localhost:3000/dashboard';
             // console.log()
           }
         }
