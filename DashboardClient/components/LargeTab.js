@@ -4,8 +4,7 @@ import {Panel, Well, Button} from 'react-bootstrap';
 import {Image, PageHeader, small} from 'react-bootstrap';
 
 
-
-const Tab = (props) => {
+const LargeTab = (props) => {
   return (
     <Panel >
       <h3>{props.header}<br/><small>{props.sub}</small></h3>
@@ -14,6 +13,6 @@ const Tab = (props) => {
   );
 }
 
-export default Tab;
+export default LargeTab;
 
 

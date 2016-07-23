@@ -1,6 +1,7 @@
 import React from 'react';
-import Pie from './Pie';
 import Tab from './Tab';
+import LargeTab from './LargeTab';
+
 
 import {Grid, Row, Col, Clearfix, Panel, Well, Button} from 'react-bootstrap';
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Image, Jumbotron} from 'react-bootstrap';
@@ -374,10 +375,10 @@ class Dashboard extends React.Component {
           <Row>
             <Col md={6} mdPush={6}>
               <Row>  
-                <Tab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet[0]} sub2={this.state.representativeTweet[1]} />
+                <LargeTab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet[0]} sub2={this.state.representativeTweet[1]} />
               </Row>
               <Row>
-                <Tab info={this.state.trendHistory} header="Representative Facebook Headlines" sub={this.state.facebookTopHeadlines[0]} sub2={this.state.facebookTopHeadlines[1]}/>
+                <LargeTab info={this.state.trendHistory} header="Representative Facebook Headlines" sub={this.state.facebookTopHeadlines[0]} sub2={this.state.facebookTopHeadlines[1]}/>
               </Row>
             </Col>
             <Col md={6} mdPull={6}>
