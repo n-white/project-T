@@ -90,12 +90,10 @@ module.exports = {
 				}
 			})
 
-			// Log the headlines to the console (for backend testing purposes)
-			// console.log('!!!!!!!!!!', tempObj, '???????????', topArticle);
-
+			// Create the final object to be sent to the client
 			var summary = {summary: tempReactions[0][1], topHeadline: topArticle.title, secondHeadline: secondArticle.title, likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
 
-			// console.log(summary)
+			console.log(summary)
 
 			res.send(summary)
 

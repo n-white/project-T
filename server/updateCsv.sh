@@ -17,6 +17,17 @@ load13="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/
 load14="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/wsj_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
 load15="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/yahoonews_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
 
+load16="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/ABCNews_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load17="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/NBCNews_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load18="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/washingtonpost_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load19="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/theguardian_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load20="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/PopSugar_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load21="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/EntertainmentTonight_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load22="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/InTouchWeekly_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load23="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/entertainmentweekly_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load24="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/starmagazineonline_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+load29="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/Esquire_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
+
 mysql --local-infile -u root -pcake << eof
 $stepone
 $steptwo
@@ -34,4 +45,14 @@ $load11
 $load12
 $load13
 $load15
+$load16
+$load17
+$load18
+$load19
+$load20
+$load21
+$load22
+$load23
+$load24
+$load29
 eof
