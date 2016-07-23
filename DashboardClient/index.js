@@ -21228,6 +21228,11 @@
 	                label: prop,
 	                score: value
 	              };
+	            } else {
+	              return {
+	                label: prop,
+	                score: value
+	              };
 	            }
 	          });
 	          context.setState({

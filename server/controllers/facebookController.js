@@ -66,7 +66,7 @@ module.exports = {
 			var secondArticle = {title: 'No Relevant news articles found', likes: 0}
 
 			// Update the tempObj with all of the headlines found
-			// Update the topArticle with the headline that has the most number of likes
+			// Update the topArticle and secondArticle with the headlines that have the most number of likes
 			data.forEach(function(item, index) {
 				tempObj[index] = 'likes: ' + item.dataValues.num_likes + ': ' + item.dataValues.status_message;
 				if (item.dataValues.num_likes > topArticle.likes) {
@@ -95,7 +95,7 @@ module.exports = {
 
 			var summary = {summary: tempReactions[0][1], topHeadline: topArticle.title, secondHeadline: secondArticle.title, likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
 
-			console.log(summary)
+			// console.log(summary)
 
 			res.send(summary)
 

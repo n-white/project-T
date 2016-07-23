@@ -17,7 +17,7 @@ load13="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/
 load14="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/wsj_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
 load15="LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/facebookScraper/yahoonews_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '\"' IGNORE 1 ROWS;"
 
-mysql -u root -pcake << eof
+mysql --local-infile -u root -pcake << eof
 $stepone
 $steptwo
 $load1
