@@ -284,21 +284,112 @@ popsci = {
 
 
 
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **cnn)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **nytimes)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **huffingtonpost)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **NPR)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **USAT)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **times)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **yahoonews)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **foxnews)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **bbc)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **wsj)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **tmz)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **et)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **eonline)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **usweekly)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **popsci)
+abc = {
+     "page_id": "ABCNews",
+     "access_token": access_token,   
+}
+
+nbc = {
+     "page_id": "NBCNews",
+     "access_token": access_token,   
+}
+
+washpost = {
+     "page_id": "washingtonpost",
+     "access_token": access_token,   
+}
+
+guardian = {
+     "page_id": "theguardian",
+     "access_token": access_token,   
+}
+
+popsugar = {
+     "page_id": "PopSugar",
+     "access_token": access_token,   
+}
+
+entonight = {
+     "page_id": "EntertainmentTonight",
+     "access_token": access_token,   
+}
+
+intouch = {
+     "page_id": "InTouchWeekly",
+     "access_token": access_token,  
+} 
+
+enweekly = {
+     "page_id": "entertainmentweekly",
+     "access_token": access_token,   
+}
+
+starmag = {
+     "page_id": "starmagazineonline",
+     "access_token": access_token,   
+}
+
+cosmopolitan = {
+     "page_id": "Cosmopolitan",
+     "access_token": access_token,   
+}
+
+people = {
+     "page_id": "peoplemag",
+     "access_token": access_token,   
+}
+
+buzzfeed = {
+     "page_id": "BuzzFeed",
+     "access_token": access_token,   
+}
+
+gawker = {
+     "page_id": "Gawker",
+     "access_token": access_token,   
+}
+
+esquire = {
+     "page_id": "Esquire",
+     "access_token": access_token,   
+}
+
+
+
+
+
+
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **cnn)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **nytimes)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **huffingtonpost)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **NPR)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **USAT)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **times)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **yahoonews)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **foxnews)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **bbc)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **wsj)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **tmz)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **et)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **eonline)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **usweekly)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **popsci)
+# new ones start here
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **esquire)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **abc)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **nbc)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **washpost)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **guardian)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **popsugar)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **entonight)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **intouch)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **enweekly)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **starmag)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **cosmopolitan)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **people)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **buzzfeed)
+schedule.every(10).minutes.do(scrapeFacebookPageFeedStatus, **gawker)
+
 
 
 while True:

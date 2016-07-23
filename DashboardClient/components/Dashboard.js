@@ -104,6 +104,11 @@ class Dashboard extends React.Component {
               label: prop,
               score: value
             };
+          } else {
+            return {
+              label: prop,
+              score: value
+            }
           }
         })
         context.setState({
