@@ -324,11 +324,6 @@ enweekly = {
      "access_token": access_token,   
 }
 
-starmag = {
-     "page_id": "starmagazineonline",
-     "access_token": access_token,   
-}
-
 cosmopolitan = {
      "page_id": "Cosmopolitan",
      "access_token": access_token,   
@@ -384,7 +379,6 @@ schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **popsugar)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **entonight)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **intouch)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **enweekly)
-schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **starmag)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **cosmopolitan)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **people)
 schedule.every(1).minutes.do(scrapeFacebookPageFeedStatus, **buzzfeed)
