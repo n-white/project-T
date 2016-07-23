@@ -21150,7 +21150,11 @@
 	      representativeNewsSource: '',
 	      twitterSpinner: false,
 	      facebookSpinner: false, //not likely to be needed
-	      twitterSummary: ''
+	      twitterSummary: '',
+	      facebookSummary: '',
+	      facebookTopHeadlines: '',
+	      facebookLikes: ''
+
 	    };
 	    return _this;
 	  }
@@ -21171,11 +21175,10 @@
 	      //pull in data from google trends to populate dropdown menu
 	      var context = this;
 	      $.get('http://localhost:3000/trends', function (data) {
-	        // console.log('!@#$!@#!@#',context);
+
 	        context.setState({
 	          trends: data
 	        });
-	        // console.log(context.state.trends);
 	      });
 	    }
 	  }, {
@@ -21187,20 +21190,18 @@
 	        currentTrend: q,
 	        twitterSpinner: true
 	      });
-	      // console.log(q, this);
+
 	      $.ajax({
 	        method: "POST",
 	        url: 'http://localhost:3000/grabTweets',
 	        data: JSON.stringify({ q: q }),
 	        contentType: "application/json",
 	        success: function success(d) {
-	          console.log('response tweet: ', d);
 	          context.setState({
 	            twitterData: [{ label: 'positive', score: d.positive }, { label: 'negative', score: d.negative }],
 	            twitterSpinner: false,
 	            twitterSummary: d.summary
 	          });
-	          console.log('New state is: ', context.state.twitterData);
 	          d3.select('#twitterChart').selectAll('svg').remove();
 	          context.updateChart(context.state.twitterData, '#twitterChart');
 	        },
@@ -21215,7 +21216,6 @@
 	        currentTrend: q
 	      });
 	      var context = this;
-	      // console.log(q, this);
 	      $.ajax({
 	        method: "POST",
 	        url: 'http://localhost:3000/grabFbook',
@@ -21236,9 +21236,14 @@
 	            }
 	          });
 	          context.setState({
-	            facebookData: fbdata
+	            facebookData: fbdata,
+	            facebookSummary: d.summary,
+	            facebookTopHeadlines: [d.topHeadline, d.secondHeadline],
+	            facebookLikes: d.likes
 	          });
-	          console.log('response fb mapped: ', fbdata);
+	          console.log(d.topHeadline);
+	          console.log('response fb mapped: ', fbdata, d);
+	          console.log('###', context.state);
 	          d3.select('#facebookChart').selectAll('svg').remove();
 	          // context.updateChart(context.state.facebookData, '#facebookChart');
 	          context.updateDonutChart(context.state.facebookData);
@@ -21255,14 +21260,12 @@
 	        currentTrend: q
 	      });
 
-	      // console.log(q, this);
 	      $.ajax({
 	        method: "POST",
 	        url: 'http://localhost:3000/grabTopTweet',
 	        data: JSON.stringify({ q: q }),
 	        contentType: "application/json",
 	        success: function success(d) {
-	          console.log('response top tweet: ', d);
 	          var tweet = map(d, function (item) {
 	            return item;
 	          });
@@ -21334,15 +21337,15 @@
 	      // emoDataset 
 
 	      // var dummyDataSet = [null, 20, 20, 20, 20, 20];
-	      console.log('this is the dataset: ', dataset);
+	      // console.log('this is the dataset: ', dataset)
 	      var newDataset = dataset.slice(4);
-	      console.log('this is the new and improved dataset: ', newDataset);
+	      // console.log('this is the new and improved dataset: ', newDataset);
 	      var dataFromServer = map(newDataset, function (item) {
-	        console.log(item);
+	        // console.log(item)
 	        return item.score == null ? 0 : item.score;
 	      });
 	      var emoDataset = [null].concat(dataFromServer);
-	      console.log('emoDataset', emoDataset);
+	      // console.log('emoDataset', emoDataset);  
 
 	      var fTest = function fTest() {
 	        emoDataset.splice(0, 1);
@@ -21496,7 +21499,7 @@
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
 	              { xs: 6, md: 4 },
-	              _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: this.state.currentTrend, sub: '(Need to figure out this data)' })
+	              _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: this.state.currentTrend, sub: 'Current Topic' })
 	            ),
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
@@ -21506,7 +21509,7 @@
 	            _react2.default.createElement(
 	              _reactBootstrap.Col,
 	              { xs: 6, md: 4 },
-	              _react2.default.createElement(_Tab2.default, { info: this.state.emotionalFeedback, header: 'Emotional Feedback', sub: '(Facebook Reactions)' })
+	              _react2.default.createElement(_Tab2.default, { info: this.state.emotionalFeedback, header: "Facebook Likes: " + this.state.facebookLikes, sub: "Facebook Summary: " + this.state.facebookSummary })
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -21523,7 +21526,7 @@
 	              _react2.default.createElement(
 	                _reactBootstrap.Row,
 	                null,
-	                _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: 'Representative News Source', sub: '(Need to figure out this data)' })
+	                _react2.default.createElement(_Tab2.default, { info: this.state.trendHistory, header: 'Representative Facebook Headlines', sub: this.state.facebookTopHeadlines[0], sub2: this.state.facebookTopHeadlines[1] })
 	              )
 	            ),
 	            _react2.default.createElement(
@@ -44313,10 +44316,12 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var tabStyles = {};
+
 	var Tab = function Tab(props) {
 	  return _react2.default.createElement(
 	    _reactBootstrap.Panel,
-	    null,
+	    { style: tabStyles },
 	    _react2.default.createElement(
 	      'h3',
 	      null,
@@ -44329,9 +44334,13 @@
 	      )
 	    ),
 	    _react2.default.createElement(
-	      'div',
+	      'h3',
 	      null,
-	      props.info
+	      _react2.default.createElement(
+	        'small',
+	        null,
+	        props.sub2
+	      )
 	    )
 	  );
 	};
