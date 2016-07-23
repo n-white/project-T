@@ -32,7 +32,11 @@ class Dashboard extends React.Component {
       representativeNewsSource: '',
       twitterSpinner: false,
       facebookSpinner: false, //not likely to be needed
-      twitterSummary: ''
+      twitterSummary: '',
+      facebookSummary: '',
+      facebookTopHeadlines: '',
+      facebookLikes: ''
+
     }
   }
 
@@ -49,11 +53,11 @@ class Dashboard extends React.Component {
     //pull in data from google trends to populate dropdown menu
     var context = this;
     $.get('http://localhost:3000/trends', function(data){
-      // console.log('!@#$!@#!@#',context);
+
       context.setState({
         trends: data
       })
-      // console.log(context.state.trends);
+
     });
   }
 
@@ -64,20 +68,18 @@ class Dashboard extends React.Component {
       currentTrend: q,
       twitterSpinner: true
     })
-    // console.log(q, this);
+  
     $.ajax({
       method: "POST",
       url: 'http://localhost:3000/grabTweets',
       data: JSON.stringify({q: q}),
       contentType: "application/json",
       success: function(d){
-        console.log('response tweet: ', d);
         context.setState({
           twitterData: [{label: 'positive', score:d.positive},{label:'negative', score:d.negative}],
           twitterSpinner: false,
           twitterSummary: d.summary
         });
-        console.log('New state is: ',context.state.twitterData);
         d3.select('#twitterChart').selectAll('svg').remove();
         context.updateChart(context.state.twitterData, '#twitterChart');
       },
@@ -91,7 +93,6 @@ class Dashboard extends React.Component {
       currentTrend: q
     })
     var context = this;
-    // console.log(q, this);
     $.ajax({
       method: "POST",
       url: 'http://localhost:3000/grabFbook',
@@ -112,9 +113,14 @@ class Dashboard extends React.Component {
           }
         })
         context.setState({
-          facebookData: fbdata
+          facebookData: fbdata,
+          facebookSummary: d.summary,
+          facebookTopHeadlines: [d.topHeadline, d.secondHeadline],
+          facebookLikes: d.likes
         });
-        console.log('response fb mapped: ', fbdata);
+        console.log(d.topHeadline);
+        console.log('response fb mapped: ', fbdata, d);
+        console.log('###', context.state);
         d3.select('#facebookChart').selectAll('svg').remove();
         // context.updateChart(context.state.facebookData, '#facebookChart');
         context.updateDonutChart(context.state.facebookData);
@@ -131,14 +137,13 @@ class Dashboard extends React.Component {
       currentTrend: q
     })
 
-    // console.log(q, this);
+
     $.ajax({
       method: "POST",
       url: 'http://localhost:3000/grabTopTweet',
       data: JSON.stringify({q: q}),
       contentType: "application/json",
       success: function(d){
-        console.log('response top tweet: ',d);
         var tweet = map(d, function(item){
           return item;
         });
@@ -222,15 +227,15 @@ class Dashboard extends React.Component {
     // emoDataset 
 
     // var dummyDataSet = [null, 20, 20, 20, 20, 20];
-    console.log('this is the dataset: ', dataset)
+    // console.log('this is the dataset: ', dataset)
     var newDataset = dataset.slice(4);
-    console.log('this is the new and improved dataset: ', newDataset);
+    // console.log('this is the new and improved dataset: ', newDataset);
     var dataFromServer = map(newDataset, function(item){
-      console.log(item)
+      // console.log(item)
       return item.score == null ? 0 : item.score;
     });
     var emoDataset = [null].concat(dataFromServer);
-    console.log('emoDataset', emoDataset);  
+    // console.log('emoDataset', emoDataset);  
 
     var fTest = function () {
       emoDataset.splice(0, 1);
@@ -334,64 +339,64 @@ class Dashboard extends React.Component {
   render () {
     return (
       <Grid>
-      <Well>
-        <Row>
-          <Navbar inverse>
-            <Navbar.Header>
-              <Navbar.Brand>
-                <a href="#">Trend Wave</a>
-              </Navbar.Brand>
-            </Navbar.Header>
-            <Nav >
-              <NavDropdown eventKey={1} title="Current Trends" id="basic-nav-dropdown" >
-                <MenuItem eventKey={1.1} >Select Trend</MenuItem>
-                <MenuItem divider />
-                <MenuItem />
-                {
-                  this.state.trends.map(function(trend, index) {
-                    var eKey = Number('1.' + (index + 1));
-                    var context = this;
-                    var handler = function(){
-                      context.allDataGrab(trend);
-                    }
-                    return <MenuItem eventKey={eKey} key={index} onClick={handler}>{trend}</MenuItem>
-                  }.bind(this))
-                }
-              </NavDropdown>
-            </Nav>
-          </Navbar>
-        </Row>
-        <Row>
-          <Col xs={6} md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="(Need to figure out this data)"/></Col>
-          <Col xs={6} md={4}><Tab info={this.state.publicSentiment} header="Twitter Summary" sub={this.state.twitterSummary}/></Col>
-          <Col xs={6} md={4}><Tab info={this.state.emotionalFeedback} header="Emotional Feedback" sub="(Facebook Reactions)"/></Col>
-        </Row>
-        <Row>
-          <Col md={6} mdPush={6}>
-            <Row>  
-              <Tab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet} />
-            </Row>
-            <Row>
-              <Tab info={this.state.trendHistory} header="Representative News Source" sub="(Need to figure out this data)" />
-            </Row>
-          </Col>
-          <Col md={6} mdPull={6}>
-            <h2 >Twitter Sentiment</h2>
-            <div id="twitterChart" style={this.state.twitterSpinner ? {backgroundImage: 'url(styles/spiffygif_46x46.gif)', 'background-repeat':'no-repeat'} : {backgroundImage: 'none'}}></div>
-            <h2>Facebook Sentiment</h2>
-            <div id="facebookChart"></div>
-            <Button bsStyle="primary" bsSize="large" onClick={this.allDataGrab.bind(this, this.state.currentTrend)} block>Update Chart  </Button>
-          </Col>
-        </Row>
-        <Row>
+        <Well>
+          <Row>
+            <Navbar inverse>
+              <Navbar.Header>
+                <Navbar.Brand>
+                  <a href="#">Trend Wave</a>
+                </Navbar.Brand>
+              </Navbar.Header>
+              <Nav >
+                <NavDropdown eventKey={1} title="Current Trends" id="basic-nav-dropdown" >
+                  <MenuItem eventKey={1.1} >Select Trend</MenuItem>
+                  <MenuItem divider />
+                  <MenuItem />
+                  {
+                    this.state.trends.map(function(trend, index) {
+                      var eKey = Number('1.' + (index + 1));
+                      var context = this;
+                      var handler = function(){
+                        context.allDataGrab(trend);
+                      }
+                      return <MenuItem eventKey={eKey} key={index} onClick={handler}>{trend}</MenuItem>
+                    }.bind(this))
+                  }
+                </NavDropdown>
+              </Nav>
+            </Navbar>
+          </Row>
+          <Row>
+            <Col xs={6} md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="Current Topic"/></Col>
+            <Col xs={6} md={4}><Tab info={this.state.publicSentiment} header="Twitter Summary" sub={this.state.twitterSummary}/></Col>
+            <Col xs={6} md={4}><Tab info={this.state.emotionalFeedback} header={"Facebook Likes: " + this.state.facebookLikes} sub={"Facebook Summary: " + this.state.facebookSummary}/></Col>
+          </Row>
+          <Row>
+            <Col md={6} mdPush={6}>
+              <Row>  
+                <Tab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet} />
+              </Row>
+              <Row>
+                <Tab info={this.state.trendHistory} header="Representative Facebook Headlines" sub={this.state.facebookTopHeadlines[0]} sub2={this.state.facebookTopHeadlines[1]}/>
+              </Row>
+            </Col>
+            <Col md={6} mdPull={6}>
+              <h2 >Twitter Sentiment</h2>
+              <div id="twitterChart" style={this.state.twitterSpinner ? {backgroundImage: 'url(styles/spiffygif_46x46.gif)', 'background-repeat':'no-repeat'} : {backgroundImage: 'none'}}></div>
+              <h2>Facebook Sentiment</h2>
+              <div id="facebookChart"></div>
+              <Button bsStyle="primary" bsSize="large" onClick={this.allDataGrab.bind(this, this.state.currentTrend)} block>Update Chart  </Button>
+            </Col>
+          </Row>
+          <Row>
 
-        </Row>
-        <Row>
-          <Jumbotron>
+          </Row>
+          <Row>
+            <Jumbotron>
 
-          </Jumbotron>
-        </Row>
-      </Well>
+            </Jumbotron>
+          </Row>
+        </Well>
       </Grid>
     );
   }
