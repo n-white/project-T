@@ -99,5 +99,5 @@ $(document).ready(function () {
             }
           }]
       });
-  }, 2000)
+  }, 1000)
 });

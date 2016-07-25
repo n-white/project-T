@@ -26,9 +26,9 @@ app.listen(3000, function (req, res) {
 
 //////
 
-var task = cron.schedule('* * * * *', function() {
-  console.log('Server is still running');
-}, false);
+// var task = cron.schedule('* * * * *', function() {
+//   console.log('Server is still running');
+// }, false);
 
 
 // var csvScheduler = cron.schedule('* * * * *', function() {
@@ -51,7 +51,7 @@ var task = cron.schedule('* * * * *', function() {
 
 
 
-task.start();
+// task.start();
 // csvScheduler.start();
 // facebookScrapeScheduler.start();
 
