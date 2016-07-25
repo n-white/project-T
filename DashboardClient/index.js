@@ -21114,11 +21114,11 @@
 
 	var _Tab2 = _interopRequireDefault(_Tab);
 
-	var _TabPopularTweets = __webpack_require__(503);
+	var _TabPopularTweets = __webpack_require__(440);
 
 	var _TabPopularTweets2 = _interopRequireDefault(_TabPopularTweets);
 
-	var _TabNewsHeadlines = __webpack_require__(504);
+	var _TabNewsHeadlines = __webpack_require__(441);
 
 	var _TabNewsHeadlines2 = _interopRequireDefault(_TabNewsHeadlines);
 
@@ -60688,8 +60688,177 @@
 	exports.ValidComponentChildren = _ValidComponentChildren3['default'];
 
 /***/ },
-/* 440 */,
-/* 441 */,
+/* 440 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(176);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var container = {
+	  'height': '250px',
+	  'float': 'left',
+	  'width': '100%'
+	};
+
+	var menuBox = {
+	  'height': '225px',
+	  'margin-bottom': '25px',
+	  'background': '#394264',
+	  'border-radius': '5px'
+	};
+
+	var titular = {
+	  'display': 'block',
+	  'line-height': '50px',
+	  'text-align': 'center',
+	  'border-top-left-radius': '5px',
+	  'border-top-right-radius': '5px',
+	  'font-size': '17px',
+	  'color': 'rgb(255, 255, 255)',
+	  'font-weight': 'bold',
+	  'background': '#35aadc'
+	};
+
+	var boxText = {
+	  'text-align': 'left',
+	  'color': 'white',
+	  'margin-left': '40px',
+	  'margin-right': '40px'
+	};
+
+	var timeSent = {
+	  'color': '#9099b7',
+	  'margin-left': '40px'
+	};
+
+	var glyphOffset = {
+	  'marginRight': '15px'
+	};
+
+	var TabPopularTweets = function TabPopularTweets(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    { style: container },
+	    _react2.default.createElement(
+	      'div',
+	      { style: menuBox },
+	      _react2.default.createElement(
+	        'h2',
+	        { style: titular },
+	        _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'retweet', style: glyphOffset }),
+	        props.header
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        { style: boxText },
+	        _react2.default.createElement(
+	          'a',
+	          { 'class': 'tweet-link', href: '#17' },
+	          '@FoxNews: '
+	        ),
+	        props.sub
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        { style: timeSent },
+	        '6 minutes ago'
+	      )
+	    )
+	  );
+	};
+
+	exports.default = TabPopularTweets;
+
+/***/ },
+/* 441 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactBootstrap = __webpack_require__(176);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var container = {
+	  'height': '200px',
+	  'float': 'left',
+	  'width': '100%'
+	};
+
+	var menuBox = {
+	  'height': '175px',
+	  'margin-bottom': '25px',
+	  'background': '#394264',
+	  'border-radius': '5px'
+	};
+
+	var titular = {
+	  'display': 'block',
+	  'line-height': '50px',
+	  'text-align': 'center',
+	  'border-top-left-radius': '5px',
+	  'border-top-right-radius': '5px',
+	  'font-size': '17px',
+	  'color': 'rgb(255, 255, 255)',
+	  'font-weight': 'bold',
+	  'background': '#e64c65'
+	};
+
+	var boxText = {
+	  'text-align': 'left',
+	  'color': 'white',
+	  'margin-left': '40px',
+	  'margin-right': '40px'
+	};
+
+	var glyphOffset = {
+	  'marginRight': '15px'
+	};
+
+	var TabNewsHeadlines = function TabNewsHeadlines(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    { style: container },
+	    _react2.default.createElement(
+	      'div',
+	      { style: menuBox },
+	      _react2.default.createElement(
+	        'h2',
+	        { style: titular },
+	        _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'globe', style: glyphOffset }),
+	        props.header
+	      ),
+	      _react2.default.createElement(
+	        'p',
+	        { style: boxText },
+	        props.subL
+	      )
+	    )
+	  );
+	};
+
+	exports.default = TabNewsHeadlines;
+
+/***/ },
 /* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -66180,177 +66349,6 @@
 
 	exports.default = (0, _createRouterHistory2.default)(_createHashHistory2.default);
 	module.exports = exports['default'];
-
-/***/ },
-/* 503 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrap = __webpack_require__(176);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var container = {
-	  'height': '250px',
-	  'float': 'left',
-	  'width': '100%'
-	};
-
-	var menuBox = {
-	  'height': '225px',
-	  'margin-bottom': '25px',
-	  'background': '#394264',
-	  'border-radius': '5px'
-	};
-
-	var titular = {
-	  'display': 'block',
-	  'line-height': '50px',
-	  'text-align': 'center',
-	  'border-top-left-radius': '5px',
-	  'border-top-right-radius': '5px',
-	  'font-size': '17px',
-	  'color': 'rgb(255, 255, 255)',
-	  'font-weight': 'bold',
-	  'background': '#35aadc'
-	};
-
-	var boxText = {
-	  'text-align': 'left',
-	  'color': 'white',
-	  'margin-left': '40px',
-	  'margin-right': '40px'
-	};
-
-	var timeSent = {
-	  'color': '#9099b7',
-	  'margin-left': '40px'
-	};
-
-	var glyphOffset = {
-	  'marginRight': '15px'
-	};
-
-	var TabPopularTweets = function TabPopularTweets(props) {
-	  return _react2.default.createElement(
-	    'div',
-	    { style: container },
-	    _react2.default.createElement(
-	      'div',
-	      { style: menuBox },
-	      _react2.default.createElement(
-	        'h2',
-	        { style: titular },
-	        _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'retweet', style: glyphOffset }),
-	        props.header
-	      ),
-	      _react2.default.createElement(
-	        'p',
-	        { style: boxText },
-	        _react2.default.createElement(
-	          'a',
-	          { 'class': 'tweet-link', href: '#17' },
-	          '@FoxNews: '
-	        ),
-	        props.sub
-	      ),
-	      _react2.default.createElement(
-	        'p',
-	        { style: timeSent },
-	        '6 minutes ago'
-	      )
-	    )
-	  );
-	};
-
-	exports.default = TabPopularTweets;
-
-/***/ },
-/* 504 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactBootstrap = __webpack_require__(176);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var container = {
-	  'height': '200px',
-	  'float': 'left',
-	  'width': '100%'
-	};
-
-	var menuBox = {
-	  'height': '175px',
-	  'margin-bottom': '25px',
-	  'background': '#394264',
-	  'border-radius': '5px'
-	};
-
-	var titular = {
-	  'display': 'block',
-	  'line-height': '50px',
-	  'text-align': 'center',
-	  'border-top-left-radius': '5px',
-	  'border-top-right-radius': '5px',
-	  'font-size': '17px',
-	  'color': 'rgb(255, 255, 255)',
-	  'font-weight': 'bold',
-	  'background': '#e64c65'
-	};
-
-	var boxText = {
-	  'text-align': 'left',
-	  'color': 'white',
-	  'margin-left': '40px',
-	  'margin-right': '40px'
-	};
-
-	var glyphOffset = {
-	  'marginRight': '15px'
-	};
-
-	var TabNewsHeadlines = function TabNewsHeadlines(props) {
-	  return _react2.default.createElement(
-	    'div',
-	    { style: container },
-	    _react2.default.createElement(
-	      'div',
-	      { style: menuBox },
-	      _react2.default.createElement(
-	        'h2',
-	        { style: titular },
-	        _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'globe', style: glyphOffset }),
-	        props.header
-	      ),
-	      _react2.default.createElement(
-	        'p',
-	        { style: boxText },
-	        props.subL
-	      )
-	    )
-	  );
-	};
-
-	exports.default = TabNewsHeadlines;
 
 /***/ }
 /******/ ]);
