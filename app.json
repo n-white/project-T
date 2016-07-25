@@ -1,0 +1,8 @@
+{
+  "name": "project-T",
+  "description": "Real-Time Sentiment Analysis on Trending Topics",
+  "repository": "https://github.com/Koji23/project-T",
+  "scripts": {
+    "postdeploy": "npm install"
+  }
+}
