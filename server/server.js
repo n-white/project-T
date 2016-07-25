@@ -11,6 +11,7 @@ var spawn = require("child_process").spawn;
 
 
 var app = express();
+var port = 3000
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -20,7 +21,7 @@ app.use('/', routes);
 app.use('/', express.static('HomepageClient'));
 app.use('/dashboard', express.static('DashboardClient'));
 
-app.listen(3000, function (req, res) {
+app.listen(port, function (req, res) {
 	console.log('server is listening on 3000');
 });
 

@@ -63,8 +63,8 @@ module.exports = {
 			var tempObj = {};
 
 			// Declare a Top Article which we'll pass to the front end
-			var topArticle = {title: 'No relevant news articles found', likes: 0}
-			var secondArticle = {title: '', likes: 0}
+			var topArticle = {title: 'No relevant news articles found', link: '', likes: 0}
+			var secondArticle = {title: '', link: '', likes: 0}
 
 			// Update the tempObj with all of the headlines found
 			// Update the topArticle and secondArticle with the headlines that have the most number of likes
@@ -73,8 +73,10 @@ module.exports = {
 				if (item.dataValues.num_likes > topArticle.likes) {
 					secondArticle.title = topArticle.title;
 					secondArticle.likes = topArticle.likes;
+					secondArticle.link = topArticle.link;
 					topArticle.title = item.dataValues.status_message;
 					topArticle.likes = item.dataValues.num_likes;
+					topArticle.link = item.dataValues.status_link;
 				}
 			})
 
@@ -91,7 +93,7 @@ module.exports = {
 			})
 
 			// Create the final object to be sent to the client
-			var summary = {summary: tempReactions[0][1], topHeadline: topArticle.title, secondHeadline: secondArticle.title, likes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
+			var summary = {summary: tempReactions[0][1], topHeadline: topArticle.title, topHeadlineLink: topArticle.link, secondHeadline: secondArticle.title, secondHeadlineLink: secondArticle.link, Alikes: num_likes, loves: num_loves, wows: num_wows, hahas: num_hahas, sads: num_sads, angrys: num_angrys}
 
 			console.log(summary)
 

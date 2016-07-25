@@ -141,7 +141,6 @@ module.exports = {
 			if (error) {
 				throw error
 			} else {
-				console.log(tweets);
 				// Send top two tweets to front end
 				if (tweets.statuses.length >= 2) {
 					res.json({1: tweets.statuses[0].text, 2: tweets.statuses[1].text});
