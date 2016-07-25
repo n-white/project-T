@@ -268,6 +268,32 @@ class Dashboard extends React.Component {
         .attr("fill", function(d, i) { return color(i); })
         .attr("d", arc);
 
+    var legend = svg.append('g')
+    .attr('class', 'legend')
+    .attr("transform","translate(200,210)")
+    .style("font-size","12px");
+
+
+    legend.append('text')
+    .text('Loves')
+    .attr('fill', 'blue');
+    legend.append('text')
+    .text('Wows')
+    .attr('dy', 15)
+    .attr('fill', 'orange');
+    legend.append('text')
+    .text('Hahas')
+    .attr('dy', 30)
+    .attr('fill', 'green');
+    legend.append('text')
+    .text('Sads')
+    .attr('dy', 45)
+    .attr('fill', 'lightblue');
+    legend.append('text')
+    .text('Angrys')
+    .attr('dy', 60)
+    .attr('fill', 'yellow');
+
     transition(1);
 
     // copied code //
