@@ -2,16 +2,21 @@ var Sequelize = require('Sequelize');
 var sequelize = new Sequelize('trendwave', 'root', 'cake');
 var mysql = require('mysql');
 
+// Table for top trends
+// Not currently being used but could be used to track trends
 var Trends = sequelize.define('Trends', {
  name: Sequelize.STRING
 });
 
+// Table for tracking Twitter sentiments
+// Not currently being used but could be used to track sentiment over time on a topic
 var Twitter_Sentiments = sequelize.define('Twitter_Sentiments', {
   neutral: Sequelize.DECIMAL,
   positive: Sequelize.DECIMAL,
   negative: Sequelize.DECIMAL
 });
 
+// Table to storing articles from news sources and their emotional reactions on Facebook
 var FB_Sentiments = sequelize.define('FB_Sentiments', {
   status_id: Sequelize.STRING,
   status_message: Sequelize.STRING(2000),
@@ -34,26 +39,10 @@ var FB_Sentiments = sequelize.define('FB_Sentiments', {
 
 FB_Sentiments.removeAttribute('id');
 
-// var Trend_Popularity = sequelize.define('Trend_Popularity', {
-//   popularity: Sequelize.INTEGER,
-//   time: Sequelize.DATE
-// });
-
-// Trends.hasMany(Twitter_Sentiments);
-
-// FB_Sentiments.hasMany(Trends);
-// Trend_Popularity.hasMany(Trends);
-
-// Twitter_Sentiments.sync().then(Trends.sync().then(FB_Sentiments.sync().then(function() {
-// "LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/csv/nytimes_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;"
-// })));
-
-// var myquery = JSON.stringify(LOAD DATA INFILE '/Users/neilWhite/Desktop/hackReactor/project-T/server/csv/nytimes_facebook_statuses.csv' INTO TABLE FB_Sentiments FIELDS TERMINATED BY ','  ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 ROWS;);
-
+// Sync tables to database
 Trends.sync().then(Twitter_Sentiments.sync().then(FB_Sentiments.sync()));
 
+// Export for use on the Controllers files
 exports.Trends = Trends;
 exports.Twitter_Sentiments = Twitter_Sentiments;
 exports.FB_Sentiments = FB_Sentiments;
-
-// exports.Trend_Popularity = Trend_Popularity;
