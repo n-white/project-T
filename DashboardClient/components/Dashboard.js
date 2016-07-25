@@ -1,13 +1,17 @@
 import React from 'react';
 import Tab from './Tab';
-import LargeTab from './LargeTab';
+import TabPopularTweets from './TabPopularTweets';
+import TabNewsHeadlines from './TabNewsHeadlines';
+import ReactDOM from 'react-dom';
 
 
-import {Grid, Row, Col, Clearfix, Panel, Well, Button} from 'react-bootstrap';
+import {Grid, Row, Col, Clearfix, Panel, Well, Button, Glyphicon} from 'react-bootstrap';
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, Image, Jumbotron} from 'react-bootstrap';
 import {Router, Route, Link, hashHistory, IndexRoute} from 'react-router';
 
-
+var styles = {
+  'background-color': 'black'
+}
 
 class Dashboard extends React.Component {
   constructor(props){
@@ -121,7 +125,7 @@ class Dashboard extends React.Component {
         });
         console.log(d.topHeadline);
         console.log('response fb mapped: ', fbdata, d);
-        console.log('###', context.state);
+        console.log('###$$$$$$$$$$$$$', context.state);
         d3.select('#facebookChart').selectAll('svg').remove();
         // context.updateChart(context.state.facebookData, '#facebookChart');
         context.updateDonutChart(context.state.facebookData);
@@ -268,32 +272,6 @@ class Dashboard extends React.Component {
         .attr("fill", function(d, i) { return color(i); })
         .attr("d", arc);
 
-    var legend = svg.append('g')
-    .attr('class', 'legend')
-    .attr("transform","translate(200,210)")
-    .style("font-size","12px");
-
-
-    legend.append('text')
-    .text('Loves')
-    .attr('fill', 'blue');
-    legend.append('text')
-    .text('Wows')
-    .attr('dy', 15)
-    .attr('fill', 'orange');
-    legend.append('text')
-    .text('Hahas')
-    .attr('dy', 30)
-    .attr('fill', 'green');
-    legend.append('text')
-    .text('Sads')
-    .attr('dy', 45)
-    .attr('fill', 'lightblue');
-    legend.append('text')
-    .text('Angrys')
-    .attr('dy', 60)
-    .attr('fill', 'yellow');
-
     transition(1);
 
     // copied code //
@@ -364,19 +342,74 @@ class Dashboard extends React.Component {
   }
 
   render () {
+    var header = {
+      'background-color': '#394264',
+      'font-color': 'white',
+      'border-color': 'rgba(231, 231, 231, 0)',
+      'margin-top': '2.5%',
+      'height': '80px',
+      'font-size': '17px',
+      'border-radius': '5px'
+    }
+
+    var headerli = {
+      'padding': '0 27px',
+      'display': 'block',
+      'line-height': '74px',
+      'font-size': '17px',
+      '-webkit-transition': 'background .3s',
+      'transition': 'background .3s',
+      'margin-top': '12.5px'
+    }
+
+    var liColor = {
+      'text-color': 'white'
+    }
+
+    var outline = {
+      'background-color': 'rgb(57, 66, 100)',
+      'height': '525px',
+      'border-radius': '5px'
+    }
+
+    var titular = {
+    'display': 'block',
+    'line-height': '50px',
+    'text-align': 'center',
+    'border-top-left-radius': '5px',
+    'border-top-right-radius': '5px',
+    'font-size': '17px',
+    'color': 'rgb(255, 255, 255)',
+    'font-weight': 'bold',
+    'background': '#35aadc'
+    }
+
+    var glyphOffset = {
+      'marginRight':'15px',
+      'font-size':'25px'
+    }
+
+    var twitterChart = {
+      'position': 'relative',
+      'left': '60%',
+      '-webkit-transform': 'translateX(-50%)',
+      '-ms-transform': 'translateX(-50%)',
+      'transform': 'translateX(-50%)'
+    }
+
     return (
+      
       <Grid>
-        <Well>
           <Row>
-            <Navbar inverse>
+            <Navbar style={header}>
               <Navbar.Header>
-                <Navbar.Brand>
-                  <a href="#">Trend Wave</a>
+                <Navbar.Brand style={headerli}>
+                  <a href="#" ><Glyphicon glyph="signal" style ={glyphOffset}/>Trend Wave</a>
                 </Navbar.Brand>
               </Navbar.Header>
-              <Nav >
-                <NavDropdown eventKey={1} title="Current Trends" id="basic-nav-dropdown" >
-                  <MenuItem eventKey={1.1} >Select Trend</MenuItem>
+              <Nav style={headerli}>
+                <NavDropdown style={liColor} eventKey={1} title="Current Trends" id="basic-nav-dropdown" >
+                  <MenuItem style={liColor} eventKey={1.1} >Select Trend</MenuItem>
                   <MenuItem divider />
                   <MenuItem />
                   {
@@ -394,36 +427,29 @@ class Dashboard extends React.Component {
             </Navbar>
           </Row>
           <Row>
-            <Col xs={6} md={4}><Tab info={this.state.trendHistory} header={this.state.currentTrend} sub="Current Topic"/></Col>
-            <Col xs={6} md={4}><Tab info={this.state.publicSentiment} header="Twitter Summary" sub={this.state.twitterSummary}/></Col>
-            <Col xs={6} md={4}><Tab info={this.state.emotionalFeedback} header={"Facebook Likes: " + this.state.facebookLikes} sub={"Facebook Summary: " + this.state.facebookSummary}/></Col>
+            <Col xs={6} md={4}><Tab style = {styles} info={this.state.trendHistory} header={this.state.currentTrend} sub="Current Topic"/></Col>
+            <Col xs={6} md={4}><Tab info={this.state.publicSentiment} header="PUBLIC SENTIMENT" sub={this.state.twitterSummary}/></Col>
+            <Col xs={6} md={4}><Tab info={this.state.emotionalFeedback} header={"EMOTIONAL FEEDBACK"} sub={this.state.facebookSummary}/></Col>
           </Row>
           <Row>
             <Col md={6} mdPush={6}>
               <Row>  
-                <LargeTab info={this.state.trendHistory} header="Representative Tweet" sub={this.state.representativeTweet[0]} sub2={this.state.representativeTweet[1]} />
+                <TabPopularTweets info={this.state.trendHistory} header="MOST POPULAR TWEETS" sub={this.state.representativeTweet} />
               </Row>
               <Row>
-                <LargeTab info={this.state.trendHistory} header="Representative Facebook Headlines" sub={this.state.facebookTopHeadlines[0]} sub2={this.state.facebookTopHeadlines[1]}/>
+                <TabNewsHeadlines info={this.state.trendHistory} header="MOST POPULAR HEADLINES" sub={this.state.facebookTopHeadlines[0]} sub2={this.state.facebookTopHeadlines[1]}/>
               </Row>
             </Col>
             <Col md={6} mdPull={6}>
-              <h2 >Twitter Sentiment</h2>
-              <div id="twitterChart" style={this.state.twitterSpinner ? {backgroundImage: 'url(styles/spiffygif_46x46.gif)', 'background-repeat':'no-repeat'} : {backgroundImage: 'none'}}></div>
-              <h2>Facebook Sentiment</h2>
-              <div id="facebookChart"></div>
-              <Button bsStyle="primary" bsSize="large" onClick={this.allDataGrab.bind(this, this.state.currentTrend)} block>Update Chart  </Button>
+              <div style={outline}>
+                <h1 style={titular}>SENTIMENT ANALYSIS</h1>
+                <div id="twitterChart" style={twitterChart}></div>
+              </div>
             </Col>
           </Row>
           <Row>
 
           </Row>
-          <Row>
-            <Jumbotron>
-
-            </Jumbotron>
-          </Row>
-        </Well>
       </Grid>
     );
   }
@@ -439,11 +465,3 @@ var map = function(obj, cb){
   }
   return result;
 }
-
-
-
-
-
-
-
-
